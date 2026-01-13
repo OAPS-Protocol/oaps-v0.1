@@ -1,25 +1,24 @@
-Open Audit Proof Standard - Version 0.1
+# Open Audit Proof Standard - Version 0.1
 
-1. Preamble: A Protocol for Truth
+## 1. Preamble: A Protocol for Truth
 
 This document defines the Open Audit Proof Standard (OAPS) v0.1. Its purpose is to establish a canonical, cryptographically-verifiable record of an audit's existence and content, independent of any judgment of quality.
 
-An OAPS Proof is a proof of fact, not a promise of safety. It answers three questions:
+An OAPS Proof is a **proof of fact, not a promise of safety**. It answers three questions:
 
-1. Existence: Did this audit exist at a specific time?
-2. Integrity: Has the audit record been altered?
-3. Source: Which auditor cryptographically attested to it?
+1.  **Existence**: Did this audit exist at a specific time?
+2.  **Integrity**: Has the audit record been altered?
+3.  **Source**: Which auditor cryptographically attested to it?
 
-2. Core Tenet: The Validity-Quality Distinction
+## 2. Core Tenet: The Validity-Quality Distinction
 
-Validity ≠ Quality
+**Validity ≠ Quality**
 
-A valid OAPS proof guarantees the data's integrity and origin. It does not guarantee the audit's correctness, thoroughness, or the security of the audited system. This distinction is fundamental to the protocol's neutrality and defensibility.
+A **valid** OAPS proof guarantees the data's integrity and origin. It does **not** guarantee the audit's correctness, thoroughness, or the security of the audited system. This distinction is fundamental to the protocol's neutrality and defensibility.
 
-3. The Proof Schema: A Deterministic Blueprint
+## 3. The Proof Schema: A Deterministic Blueprint
 
-3.1. Required Data Structure
-
+### 3.1 Required Data Structure
 The proof is a JSON object. The following schema is the single source of truth for canonicalization.
 
 ```json
@@ -127,7 +126,6 @@ The proof is a JSON object. The following schema is the single source of truth f
     }
   }
 }
-```
 
 4. The Canon: Rules for Deterministic Hashing
 
@@ -149,7 +147,7 @@ function canonicalize(proofObject) {
 
 5. Cryptographic Identity & On-Chain Record
 
-5.1. The Proof Hash
+5.1 The Proof Hash
 
 The unique identifier of an audit proof is defined as:
 
@@ -157,7 +155,7 @@ The unique identifier of an audit proof is defined as:
 proofHash = keccak256(utf8.encode(canonicalizedProofJsonString))
 ```
 
-5.2. The On-Chain Tuple
+5.2 The On-Chain Tuple
 
 The OAPS Registry stores the minimum data required for verification:
 
@@ -170,7 +168,7 @@ struct ProofRecord {
 }
 ```
 
-5.3. Workflow
+5.3 Workflow
 
 1. Generate: The auditor creates the JSON object, canonicalizes it, and computes the proofHash.
 2. Sign: The auditor signs the proofHash with the private key corresponding to auditor.id.
@@ -211,4 +209,3 @@ Footnotes:
 1. All hashes are represented as lowercase hexadecimal strings without the 0x prefix in the JSON schema. The keccak256 function expects a raw byte array.
 2. The blockchain identifier should follow the Chainlist naming convention where applicable.
 3. This document is the protocol. Implementations must adhere to it exactly to achieve interoperability.
-
