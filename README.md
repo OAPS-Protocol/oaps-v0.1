@@ -21,3 +21,13 @@ This protocol is governed by a strict **Funding & Independence Charter** (to be 
 *   **Registry Smart Contract**: (Coming Soon) The on-chain ledger for proof hashes.
 *   **Accreditation Framework**: (Layer B - Coming Soon) The decentralized trust layer.
 *   **Tools & Implementations**: (Coming Soon) Reference libraries for proof generation.
+
+# OAPS Protocol Deployments
+
+## 🧪 Sepolia Testnet - Official Test Registry (v0.1)
+**This is the official testnet registry for all OAPS v0.1 pilot audits and development.**
+
+*   **Contract:** `OAPSRegistryV0`
+*   **Address:** [`0x83e7593D3c8343437d92094d9485D6eDBfF89131`](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131)
+*   **Status:** **VERIFIED & ACTIVE**
+*   **Note:** This contract is used for testing and pilot audits. All interactions require Sepolia test ETH.
