@@ -1,0 +1,11 @@
+name: OAPS Tests
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test Proof Generator
+        run: |
+          python3 -m pip install web3
+          python3 tools/oaps-proof-generator.py examples/sample-proof-v0.1.json
