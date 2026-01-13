@@ -31,3 +31,21 @@ This protocol is governed by a strict **Funding & Independence Charter** (to be 
 *   **Address:** [`0x83e7593D3c8343437d92094d9485D6eDBfF89131`](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131)
 *   **Status:** **VERIFIED & ACTIVE**
 *   **Note:** This contract is used for testing and pilot audits. All interactions require Sepolia test ETH.
+
+## 🎯 Current Status (January 2026)
+
+### ✅ OAPS v0.1 is LIVE and OPERATIONAL
+- **Protocol Specification:** Complete and stable
+- **Registry Contract:** [Verified on Sepolia](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131)
+- **Tools:** Proof generator and registration dApp working
+- **First Proof:** Successfully registered on-chain ([View Transaction](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4))
+
+### 📚 Documentation
+- [Getting Started Guide](GETTING_STARTED.md) - For auditors and projects
+- [Milestones](MILESTONES.md) - Development progress and achievements
+- [Specification](SPECIFICATION.md) - Technical standard definition
+
+### 🚀 What's Next
+- Pilot audit program with real projects
+- Development of Accreditation Layer (Layer B)
+- Shadow Operator formation for sustainable funding
