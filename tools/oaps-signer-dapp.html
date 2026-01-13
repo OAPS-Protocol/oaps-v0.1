@@ -4,81 +4,235 @@
     <title>OAPS v0.1 - Proof Signer & Registry</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         body { font-family: monospace; max-width: 800px; margin: 2rem auto; padding: 1rem; }
         input, textarea, button { display: block; width: 100%; margin: 0.5rem 0; padding: 0.5rem; box-sizing: border-box; }
         button { background: #000; color: #fff; border: none; cursor: pointer; }
+        button:disabled { background: #666; cursor: not-allowed; }
         .success { color: green; font-weight: bold; }
         .error { color: red; }
+        .warning { color: orange; font-weight: bold; }
         .section { border: 1px solid #ccc; padding: 1rem; margin: 1rem 0; }
+        .status { font-family: monospace; word-break: break-all; padding: 0.5rem; background: #f5f5f5; }
+        .network-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #8B5CF6;
+            color: white;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .network-badge.sepolia { background: #8B5CF6; }
+        .network-badge.other { background: #EF4444; }
     </style>
 </head>
 <body>
     <h1>🔐 OAPS v0.1 - Proof Signer & Registry</h1>
-    <p>Connect your wallet, sign a proof hash, and register it on the OAPS Sepolia Registry.</p>
+    <p>Connect your wallet, sign a proof hash, and register it on the OAPS Registry.</p>
+    <p class="warning">⚠️ This dApp requires <strong>Sepolia Testnet</strong> to prevent real ETH loss.</p>
 
     <div class="section">
-        <h3>1. Connect Wallet</h3>
-        <button id="connectButton">🦊 Connect MetaMask</button>
-        <p>Connected Account: <span id="accountAddress">Not connected</span></p>
+        <h3>1. Network & Wallet</h3>
+        <div id="networkStatus" class="status">Checking network...</div>
+        <button id="connectButton" disabled>🦊 Connect MetaMask</button>
+        <p>Connected Account: <span id="accountAddress" class="status">Not connected</span></p>
     </div>
 
     <div class="section">
         <h3>2. Enter Proof Hash</h3>
         <p>Paste the keccak256 hash of your canonicalized OAPS proof JSON.</p>
         <input type="text" id="proofHashInput" placeholder="0x1234..." size="70">
-        <button id="signButton">✍️ Sign Proof Hash</button>
-        <p>Signature: <span id="signatureOutput">-</span></p>
+        <button id="signButton" disabled>✍️ Sign Proof Hash</button>
+        <p>Signature: <span id="signatureOutput" class="status">-</span></p>
     </div>
 
     <div class="section">
-        <h3>3. Register on OAPS Registry (Sepolia)</h3>
-        <p><strong>Contract:</strong> <code>0x83e7593D3c8343437d92094d9485D6eDBfF89131</code></p>
-        <button id="registerButton">📝 Register Proof (Send Transaction)</button>
+        <h3>3. Register on OAPS Registry</h3>
+        <p><strong>Contract:</strong> <code>0x83e7593D3c8343437d92094d9485D6eDBfF89131</code> <span class="network-badge sepolia">Sepolia</span></p>
+        <button id="registerButton" disabled>📝 Register Proof (Send Transaction)</button>
         <p id="transactionResult">-</p>
     </div>
 
     <div class="section">
         <h3>4. Verify Registration</h3>
-        <button id="verifyButton">🔍 Check Registration Time</button>
+        <button id="verifyButton" disabled>🔍 Check Registration Time</button>
         <p>Result: <span id="verificationResult">-</span></p>
     </div>
 
     <script>
-        let provider, signer, contract, userAddress;
-        const contractAddress = "0x83e7593D3c8343437d92094d9485D6eDBfF89131";
+        // State variables
+        let provider = null;
+        let signer = null;
+        let contract = null;
+        let userAddress = null;
+        
+        // Sepolia configuration
+        const SEPOLIA_CONFIG = {
+            chainId: "0xaa36a7", // 11155111 in hex
+            chainName: "Sepolia",
+            registry: "0x83e7593D3c8343437d92094d9485D6eDBfF89131",
+            explorer: "https://sepolia.etherscan.io",
+            rpcUrl: "https://rpc.sepolia.org"
+        };
+        
         const contractABI = [
             "function registerProof(bytes32 _proofHash, bytes calldata _signature) external returns (bool)",
             "function registrationTime(bytes32 _proofHash) external view returns (uint256)"
         ];
 
+        // Check and enforce Sepolia network
+        async function checkAndSwitchToSepolia() {
+            const networkStatus = document.getElementById('networkStatus');
+            
+            if (typeof window.ethereum === 'undefined') {
+                networkStatus.innerHTML = '<span class="error">❌ MetaMask not detected. Please install MetaMask.</span>';
+                return false;
+            }
+            
+            try {
+                // Get current chain
+                const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+                
+                // If already on Sepolia
+                if (currentChainId === SEPOLIA_CONFIG.chainId) {
+                    networkStatus.innerHTML = `<span class="success">✅ Connected to Sepolia Testnet</span> <span class="network-badge sepolia">Sepolia</span>`;
+                    document.getElementById('connectButton').disabled = false;
+                    return true;
+                }
+                
+                // Show current network
+                let networkName = "Unknown";
+                switch(currentChainId) {
+                    case "0x1": networkName = "Ethereum Mainnet"; break;
+                    case "0x5": networkName = "Goerli"; break;
+                    case "0xaa36a7": networkName = "Sepolia"; break;
+                    default: networkName = `Chain ID: ${parseInt(currentChainId)}`;
+                }
+                
+                networkStatus.innerHTML = `<span class="warning">⚠️ Current network: ${networkName}</span> <span class="network-badge other">Wrong Network</span>`;
+                
+                // Try to switch to Sepolia
+                try {
+                    networkStatus.innerHTML += `<br><span class="warning">⏳ Switching to Sepolia...</span>`;
+                    
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: SEPOLIA_CONFIG.chainId }],
+                    });
+                    
+                    // Successfully switched
+                    networkStatus.innerHTML = `<span class="success">✅ Switched to Sepolia Testnet</span> <span class="network-badge sepolia">Sepolia</span>`;
+                    document.getElementById('connectButton').disabled = false;
+                    return true;
+                    
+                } catch (switchError) {
+                    // If Sepolia not added to MetaMask
+                    if (switchError.code === 4902) {
+                        networkStatus.innerHTML += `<br><span class="warning">⏳ Adding Sepolia network...</span>`;
+                        
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: SEPOLIA_CONFIG.chainId,
+                                chainName: 'Sepolia Testnet',
+                                nativeCurrency: { name: 'Sepolia ETH', symbol: 'ETH', decimals: 18 },
+                                rpcUrls: [SEPOLIA_CONFIG.rpcUrl],
+                                blockExplorerUrls: [SEPOLIA_CONFIG.explorer]
+                            }],
+                        });
+                        
+                        networkStatus.innerHTML = `<span class="success">✅ Sepolia added and connected</span> <span class="network-badge sepolia">Sepolia</span>`;
+                        document.getElementById('connectButton').disabled = false;
+                        return true;
+                    }
+                    
+                    // User rejected the switch
+                    networkStatus.innerHTML = `<span class="error">❌ Please switch to Sepolia manually in MetaMask</span>`;
+                    return false;
+                }
+                
+            } catch (error) {
+                networkStatus.innerHTML = `<span class="error">❌ Network error: ${error.message}</span>`;
+                return false;
+            }
+        }
+
         // 1. Connect Wallet
         document.getElementById('connectButton').onclick = async () => {
-            if (typeof window.ethereum === 'undefined') {
-                alert("Please install MetaMask!");
-                return;
+            const networkOk = await checkAndSwitchToSepolia();
+            if (!networkOk) return;
+            
+            try {
+                // Request accounts
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+                
+                // Create provider and signer
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                userAddress = await signer.getAddress();
+                
+                // Update UI
+                document.getElementById('accountAddress').textContent = userAddress;
+                document.getElementById('accountAddress').style.color = "green";
+                
+                // Create contract instance
+                contract = new ethers.Contract(SEPOLIA_CONFIG.registry, contractABI, signer);
+                
+                console.log("✅ Connected to Sepolia:", userAddress);
+                
+                // Enable sign button
+                document.getElementById('signButton').disabled = false;
+                document.getElementById('connectButton').disabled = true;
+                document.getElementById('connectButton').textContent = "✅ Connected";
+                
+                // Listen for network changes
+                window.ethereum.on('chainChanged', async (chainId) => {
+                    console.log("Network changed to:", chainId);
+                    if (chainId === SEPOLIA_CONFIG.chainId) {
+                        // Still on Sepolia - reconnect
+                        location.reload();
+                    } else {
+                        // Switched away from Sepolia - show warning
+                        document.getElementById('networkStatus').innerHTML = 
+                            `<span class="error">⚠️ Switched away from Sepolia. Please switch back.</span>`;
+                        document.getElementById('connectButton').disabled = true;
+                    }
+                });
+                
+            } catch (err) {
+                console.error("Connection error:", err);
+                alert("Connection failed: " + err.message);
             }
-            provider = new ethers.providers.Web3Provider(window.ethereum);
-            await provider.send("eth_requestAccounts", []);
-            signer = provider.getSigner();
-            userAddress = await signer.getAddress();
-            document.getElementById('accountAddress').textContent = userAddress;
-            contract = new ethers.Contract(contractAddress, contractABI, signer);
-            console.log("Connected:", userAddress);
         };
 
         // 2. Sign Proof Hash
         document.getElementById('signButton').onclick = async () => {
+            if (!signer) {
+                alert("Please connect wallet first!");
+                return;
+            }
+            
             const proofHash = document.getElementById('proofHashInput').value.trim();
+            
             if (!proofHash.startsWith('0x') || proofHash.length !== 66) {
                 alert("Invalid hash. Must be 66 chars (0x + 64 hex).");
                 return;
             }
+            
             try {
                 const signature = await signer.signMessage(ethers.utils.arrayify(proofHash));
                 document.getElementById('signatureOutput').textContent = signature;
-                console.log("Signature:", signature);
+                document.getElementById('signatureOutput').style.color = "blue";
+                
+                document.getElementById('registerButton').disabled = false;
+                document.getElementById('signButton').disabled = true;
+                document.getElementById('signButton').textContent = "✅ Signed";
+                
             } catch (err) {
                 alert("Signing failed: " + err.message);
             }
@@ -86,19 +240,33 @@
 
         // 3. Register Proof
         document.getElementById('registerButton').onclick = async () => {
+            if (!contract) {
+                alert("Contract not initialized. Connect wallet first.");
+                return;
+            }
+            
             const proofHash = document.getElementById('proofHashInput').value.trim();
             const signature = document.getElementById('signatureOutput').textContent;
+            
             if (signature === '-') {
                 alert("Please sign the hash first.");
                 return;
             }
+            
             try {
                 const tx = await contract.registerProof(proofHash, signature);
                 document.getElementById('transactionResult').innerHTML = 
                     `<span class="success">✅ Transaction sent: ${tx.hash}</span>`;
-                await tx.wait();
+                
+                const receipt = await tx.wait();
+                
                 document.getElementById('transactionResult').innerHTML += 
-                    `<br><span class="success">✔️ Confirmed!</span>`;
+                    `<br><span class="success">✔️ Confirmed in block ${receipt.blockNumber}</span>`;
+                
+                document.getElementById('verifyButton').disabled = false;
+                document.getElementById('registerButton').disabled = true;
+                document.getElementById('registerButton').textContent = "✅ Registered";
+                
             } catch (err) {
                 document.getElementById('transactionResult').innerHTML = 
                     `<span class="error">❌ Failed: ${err.message}</span>`;
@@ -107,11 +275,18 @@
 
         // 4. Verify Registration
         document.getElementById('verifyButton').onclick = async () => {
+            if (!contract) {
+                alert("Contract not initialized.");
+                return;
+            }
+            
             const proofHash = document.getElementById('proofHashInput').value.trim();
+            
             if (!proofHash.startsWith('0x')) {
                 alert("Enter a valid proof hash.");
                 return;
             }
+            
             try {
                 const timestamp = await contract.registrationTime(proofHash);
                 if (timestamp.toString() === '0') {
@@ -120,16 +295,25 @@
                 } else {
                     document.getElementById('verificationResult').innerHTML = 
                         `<span class="success">✅ Registered at timestamp: ${timestamp.toString()}</span>`;
+                    
+                    document.getElementById('verifyButton').disabled = true;
+                    document.getElementById('verifyButton').textContent = "✅ Verified";
                 }
             } catch (err) {
                 document.getElementById('verificationResult').innerHTML = 
                     `<span class="error">❌ Error: ${err.message}</span>`;
             }
         };
+
+        // Initialize: Check network on page load
+        window.addEventListener('load', async () => {
+            await checkAndSwitchToSepolia();
+        });
     </script>
 
     <hr>
+    <p><strong>⚠️ Safety Notice:</strong> This dApp automatically enforces Sepolia Testnet to prevent accidental real ETH transactions.</p>
     <p><strong>Workflow:</strong> Connect → Paste Proof Hash → Sign → Register → Verify.</p>
-    <p><strong>Note:</strong> This is a prototype. The proof hash must be generated separately using the OAPS canonicalization tool.</p>
+    <p><strong>Network:</strong> Sepolia Testnet only | <strong>Contract:</strong> Verified on <a href="https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131" target="_blank">Etherscan</a></p>
 </body>
 </html>
