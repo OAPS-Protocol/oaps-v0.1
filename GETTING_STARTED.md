@@ -1,3 +1,6 @@
+
+
+
 # Getting Started with OAPS v0.1
 
 ## 🎯 Quick Overview
@@ -69,10 +72,12 @@ Click **"Build Proof & Generate Hash"**
   "reportHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "timestamp": "2024-01-15T12:00:00Z"
 }
+```
 
 4. Generating Hashes Programmatically
 
 If you need to generate proof hashes outside the dApp:
+
 
 // Using ethers.js
 const ethers = require('ethers');
@@ -84,6 +89,7 @@ function generateProofHash(proofObject) {
   // 2. Hash using keccak256
   return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(canonical));
 }
+```
 
 🔍 For Projects: Verify Audit Proofs
 
@@ -123,6 +129,8 @@ Any third party can verify without trusting OAPS:
 🛠️ Technical Integration
 
 For Developers: API Access
+
+
 // Interact with OAPS Registry
 const contractABI = [
   "function registerProof(bytes32 _proofHash, bytes memory _signature) external returns (bool)",
@@ -131,6 +139,7 @@ const contractABI = [
 ];
 
 const registryAddress = "0x83e7593D3c8343437d92094d9485D6eDBfF89131";
+```
 
 For Security Researchers
 
@@ -175,3 +184,6 @@ For technical issues or questions:
 Remember: OAPS verifies proofs, not promises. Always conduct your own due diligence.
 
 Last Updated: January 2024 | OAPS v0.1
+
+
+
