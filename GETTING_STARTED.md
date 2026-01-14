@@ -1,6 +1,4 @@
 
-
-
 # Getting Started with OAPS v0.1
 
 ## 🎯 Quick Overview
@@ -78,7 +76,7 @@ Click **"Build Proof & Generate Hash"**
 
 If you need to generate proof hashes outside the dApp:
 
-
+```javascript
 // Using ethers.js
 const ethers = require('ethers');
 
@@ -130,7 +128,7 @@ Any third party can verify without trusting OAPS:
 
 For Developers: API Access
 
-
+```javascript
 // Interact with OAPS Registry
 const contractABI = [
   "function registerProof(bytes32 _proofHash, bytes memory _signature) external returns (bool)",
