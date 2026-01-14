@@ -1,165 +1,237 @@
-Open Audit Proof Standard (OAPS) v0.1
 
-OAPS is the on-chain proof layer for crypto audits — making audit reports verifiable, timestamped, and impossible to fake.
+# 🔐 Open Audit Proof Standard (OAPS) v0.1
 
-🚀 Quick Start
+**On-chain verifiable audit proofs for crypto security. Immutable, timestamped, cryptographically signed.**
 
-· Auditors: Build and register your first proof
-· Projects: Verify audit proofs on-chain
-· Developers: Review the technical specification
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Status: v0.1 Live](https://img.shields.io/badge/Status-v0.1%20Live-brightgreen)](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131)
+[![Network: Sepolia](https://img.shields.io/badge/Network-Sepolia-purple)](https://sepolia.etherscan.io)
 
-Why OAPS Exists
+## 🚀 Quick Start
 
-Most crypto audits are published as static PDFs that cannot be independently verified, timestamped, or cryptographically linked to an auditor.
+| For Auditors | For Projects | For Developers |
+|--------------|--------------|----------------|
+| [📖 Getting Started Guide](GETTING_STARTED.md) | [🔍 Verify Proofs](#verification) | [📚 Technical Spec](SPECIFICATION.md) |
+| [🛠️ Use Proof Builder](tools/oaps-signer-dapp.html) | [📋 Check Registry](#deployments) | [📦 Contract ABI](#contract-interface) |
+| [🧪 Test on Sepolia](#deployments) | [🎯 Understand Proofs](#core-principle) | [🔧 Contribute](#-resources) |
 
-OAPS introduces a neutral, protocol-level standard that allows anyone to verify:
+## 📋 Overview
 
-· that an audit report existed at a specific time,
-· that it has not been altered,
-· and which auditor cryptographically signed it.
+OAPS solves a critical problem in crypto security: **most audit reports are unverifiable PDFs**. We provide a protocol-level standard that makes audit proofs:
 
-OAPS does not replace auditors.
-It replaces unverifiable audit claims.
+- ✅ **Verifiable** - Anyone can independently verify
+- ✅ **Timestamped** - Proof of existence at specific time
+- ✅ **Immutable** - Cannot be altered or faked
+- ✅ **Attributable** - Cryptographically linked to auditor
 
-What OAPS Does
+### What OAPS Is NOT
+- ❌ NOT an audit firm
+- ❌ NOT a safety certification
+- ❌ NOT a guarantee of correctness
+- ❌ NOT investment advice
 
-The Open Audit Proof Standard (OAPS) provides a canonical, machine-readable, and cryptographically verifiable format for publishing the results of a smart contract security audit. It separates proof of existence from judgment of quality.
+**OAPS verifies proofs — not promises.**
 
-What OAPS Is NOT
+## 🎯 Core Principle: Validity ≠ Quality
 
-· OAPS is NOT an audit firm
-· OAPS does NOT certify project safety
-· OAPS does NOT guarantee correctness or prevent fraud
-· OAPS does NOT provide investment advice
+| Validity (What OAPS Verifies) | Quality (What OAPS Does NOT Verify) |
+|-------------------------------|-------------------------------------|
+| ✅ Proof existence at specific time | ❌ Audit correctness |
+| ✅ Data integrity (unaltered) | ❌ Auditor skill/competence |
+| ✅ Cryptographic signature | ❌ System security |
+| ✅ On-chain timestamp | ❌ Finding accuracy |
 
-OAPS verifies proofs — not promises.
+## 🏗️ Architecture
 
-Core Principle: Validity ≠ Quality
+### Layer A: Protocol (Current - v0.1)
+- **Proof Registry** - Immutable on-chain record
+- **Canonical Standard** - Deterministic JSON schema
+- **Verification Protocol** - Independent validation
 
-An OAPS proof validates that a specific audit report exists and is unchanged. It does not guarantee the report's correctness, the auditor's skill, or the system's security. Trust is layered separately via the Accreditation Layer (Layer B).
+### Layer B: Accreditation (Future)
+- Auditor reputation system
+- Decentralized trust layer
+- Quality signaling mechanism
 
-📦 Complete OAPS v0.1 Implementation
+### Layer C: Shadow Operator (Future)
+- Sustainable funding model
+- Protocol development
+- Ecosystem services
 
-✅ All Core Components Are Now Live
+## 📦 Complete Implementation
 
-Component Status Link
-Protocol Specification ✅ Complete SPECIFICATION.md
-Registry Smart Contract ✅ Verified on Sepolia 0x83e7593...DBfF89131
-Proof Builder & Registry dApp ✅ Fully Functional tools/oaps-signer-dapp.html
-Getting Started Guide ✅ Complete GETTING_STARTED.md
-Milestone Tracking ✅ Updated MILESTONES.md
+### ✅ All Components Live & Operational
 
-🎯 First Proof Successfully Registered
+| Component | Status | Details |
+|-----------|--------|---------|
+| **Protocol Specification** | ✅ Complete | [SPECIFICATION.md](SPECIFICATION.md) |
+| **Registry Smart Contract** | ✅ Verified | [Sepolia Etherscan](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131) |
+| **Proof Builder dApp** | ✅ Fully Functional | [tools/oaps-signer-dapp.html](tools/oaps-signer-dapp.html) |
+| **Documentation Suite** | ✅ Complete | Spec + Guides + Milestones |
+| **First Proof** | ✅ Registered | [View Transaction](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4) |
 
-· Transaction: 0x87045637...6f6b05d6c4
-· Proof Hash: 0x28d823138f5aa3a59b2a3c84155f4d0a8720a76dac090801a20339bc0effbae5
-· Timestamp: January 2026
-· Block: 10032252
+## 🧪 Deployments
 
-🧪 OAPS Protocol Deployments
+### Sepolia Testnet (v0.1)
+**Official test registry for pilot audits and development.**
 
-Sepolia Testnet - Official Test Registry (v0.1)
+```solidity
+Contract: OAPSRegistryV0
+Address: 0x83e7593D3c8343437d92094d9485D6eDBfF89131
+Network: Sepolia Testnet
+Status: VERIFIED & ACTIVE
+```
 
-This is the official testnet registry for all OAPS v0.1 pilot audits and development.
+🔗 Links:
 
-· Contract: OAPSRegistryV0
-· Address: 0x83e7593D3c8343437d92094d9485D6eDBfF89131
-· Status: VERIFIED & ACTIVE
-· Note: This contract is used for testing and pilot audits. All interactions require Sepolia test ETH.
+· View on Etherscan
+· Read Contract
+· Write Contract
 
 📚 Documentation
 
-Complete Documentation Suite
+Document Purpose Audience
+SPECIFICATION.md Technical standard definition Developers, Auditors
+GETTING_STARTED.md Step-by-step guides Auditors, Projects
+MILESTONES.md Progress tracking Community, Contributors
 
-1. SPECIFICATION.md - The complete technical standard
-2. GETTING_STARTED.md - Step-by-step guides for auditors and projects
-3. MILESTONES.md - Development progress and achievements
-
-Live Tools
-
-· Proof Builder dApp - Complete web interface for proof creation and registration
-· Direct Contract Interaction - Verify proofs on Etherscan
-
-🏛️ Governance & Funding
-
-This protocol is governed by a strict Funding & Independence Charter (to be published) to ensure permanent neutrality and anti-capture. It is maintained by the OAPS-Protocol organization.
-
-🔄 Three-Layer Architecture
-
-Layer A: OAPS Protocol (Current - v0.1)
-
-· Proof Registry - Immutable on-chain record of audit proofs
-· Canonical Standard - Deterministic proof format and hashing
-· Verification Protocol - Independent proof verification
-
-Layer B: Accreditation (Next Phase)
-
-· Verified auditor reputation system
-· Decentralized trust layer
-· Quality signaling separate from validity
-
-Layer C: Shadow Operator (Funding Layer)
-
-· Sustainable funding mechanism
-· Protocol development funding
-· Ecosystem services
-
-🚀 Getting Started
+🔧 Usage
 
 For Auditors
 
-1. Review the Getting Started Guide
-2. Use the Proof Builder dApp to create and register proofs
-3. Test with Sepolia ETH before mainnet usage
+1. Prepare your audit report and metadata
+2. Navigate to Proof Builder dApp
+3. Fill the form with audit details
+4. Generate proof hash (auto-canonicalized)
+5. Connect MetaMask (Sepolia network)
+6. Sign the proof hash
+7. Register on-chain (requires Sepolia ETH)
+8. Verify registration status
 
 For Projects
 
-1. Request OAPS-compliant audits from auditors
-2. Verify proofs using the Sepolia registry
-3. Integrate OAPS verification into your security documentation
+1. Request OAPS-compliant audit from auditor
+2. Receive proof hash and metadata
+3. Verify on-chain:
+   ```javascript
+   // Using Etherscan interface
+   registrationTime(proofHash) → returns timestamp (or 0 if not found)
+   ```
+4. Validate auditor signature matches claimed identity
 
 For Developers
 
-1. Review the technical specification
-2. Audit the smart contract code
-3. Contribute to tooling or documentation
+```javascript
+// Contract ABI
+const contractABI = [
+  "function registerProof(bytes32 _proofHash, bytes memory _signature) external returns (bool)",
+  "function registrationTime(bytes32 _proofHash) external view returns (uint256)",
+  "function verifyProof(bytes32 _proofHash) external view returns (uint256)"
+];
 
-🎯 Current Status (January 2026)
+// Contract Address
+const registryAddress = "0x83e7593D3c8343437d92094d9485D6eDBfF89131";
+```
 
-✅ OAPS v0.1 is LIVE and OPERATIONAL
+🎯 Milestone Achievements
 
-· Protocol Specification: Complete and stable
-· Registry Contract: Verified on Sepolia
-· Tools: Complete proof builder and registration dApp
-· First Proof: Successfully registered on-chain (View Transaction)
-· Documentation: Complete suite for all user types
+🚀 v0.1 Launch (January 2026)
 
-🔄 What's Next
-
-· Pilot audit program with real projects
-· Accreditation Layer (Layer B) development
-· Shadow Operator formation for sustainable funding
-· GitHub Pages deployment for professional presentation
+· First Proof Registered: 0x87045637...6f6b05d6c4
+· Proof Hash: 0x28d823138f5aa3a59b2a3c84155f4d0a8720a76dac090801a20339bc0effbae5
+· Block: 10032252
+· Timestamp: January 2026
 
 📊 Progress Summary
 
-Milestone Status Verification
-v0.1 Specification ✅ Complete SPECIFICATION.md
-Registry Contract ✅ Deployed & Verified Etherscan
-Proof Builder dApp ✅ Fully Functional tools/oaps-signer-dapp.html
-Documentation Suite ✅ Complete Specification + Guides + Milestones
-First Proof Registered ✅ On-Chain Verified Transaction
+Milestone Status Date
+Specification v0.1 ✅ Complete Jan 2026
+Registry Contract ✅ Deployed & Verified Jan 2026
+Proof Builder dApp ✅ Fully Functional Jan 2026
+Documentation ✅ Complete Jan 2026
+First Proof ✅ On-Chain Verified Jan 2026
+
+🔍 Verification Protocol
+
+Independent Verification Steps
+
+Any third party can verify without trusting OAPS:
+
+1. Obtain Data - Get audit report and metadata from auditor
+2. Reconstruct Proof - Build JSON object per OAPS schema
+3. Canonicalize - Sort keys, remove whitespace
+4. Compute Hash - keccak256(canonicalJSON)
+5. Query Registry - Check registrationTime(proofHash)
+6. Validate - Confirm auditor address matches signature
+
+What Verification Confirms
+
+· ✅ Existence - Proof registered at specific time
+· ✅ Integrity - Data unaltered since registration
+· ✅ Source - Specific auditor signed it
+
+🏛️ Governance
+
+This protocol follows a Funding & Independence Charter (forthcoming) ensuring:
+
+· Neutrality - No single entity controls the protocol
+· Anti-capture - Structural safeguards against control
+· Transparency - All decisions and funding public
+· Sustainability - Revenue funds protocol development
+
+❓ Troubleshooting
+
+Issue Solution
+MetaMask not detected Install/Enable MetaMask extension
+Wrong network Switch to Sepolia Testnet
+Invalid hash format Ensure 66 chars (0x + 64 hex)
+Transaction failed Check Sepolia ETH balance
+Proof not found Verify hash computation matches spec
+
+Getting Test ETH
+
+1. Visit Sepolia Faucet
+2. Enter wallet address
+3. Receive 0.1-0.5 Sepolia ETH (enough for 10-50 registrations)
+
+🚀 What's Next
+
+Immediate (Pilot Program)
+
+· Onboard 3-5 pilot auditors
+· Register 10+ test proofs
+· Gather user feedback
+· Refine tooling based on real usage
+
+Short-term (Q1 2026)
+
+· Accreditation Layer (Layer B) design
+· Shadow Operator formation
+· GitHub Pages deployment
+· Community governance setup
+
+Long-term (2026+)
+
+· Ethereum mainnet deployment
+· Multi-chain support
+· Enterprise API development
+· Industry standard adoption
 
 🔗 Resources
 
-· GitHub Repository: OAPS-Protocol/oaps-v0.1
-· Live Contract: Sepolia Etherscan
-· First Transaction: Proof Registration
-· Test ETH Faucet: Get Sepolia ETH
+· Repository: github.com/OAPS-Protocol/oaps-v0.1
+· Contract: Etherscan
+· First Proof: Transaction
+· Test ETH: Sepolia Faucet
+
+📄 License
+
+MIT License - see LICENSE file for details.
 
 ---
 
-Remember: OAPS establishes cryptographic truth, not subjective judgment.
-Validity ≠ Quality – we verify proofs, not promises.
+⚠️ Disclaimer: OAPS provides proof verification only. It does not guarantee audit quality, system security, or investment safety. Always conduct independent due diligence.
 
-Trust is verifiable, not promised.
+Core Principle Maintained: Validity ≠ Quality
+
+
