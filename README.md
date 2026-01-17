@@ -50,7 +50,7 @@ OAPS provides foundational infrastructure for verifying professional work across
 | **Registry Smart Contract** | ✅ Verified | [Sepolia Etherscan](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131) |
 | **Proof Builder dApp** | ✅ Fully Functional | [Live dApp](https://oaps-signer-dapp.vercel.app) (source: `tools/`) |
 | **Documentation Suite** | ✅ Complete | Guides, Milestones, and Full Specification |
-| **Pilot Proofs** | ✅ Registered | [Guard Check Proof](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4) • [State Machine Proof](https://sepolia.etherscan.io/tx/0xe9e28b54ceeb871e1279a5dcccff9ca540af0b3b16571ecc17c619c28b01f07) |
+| **Pilot Proofs** | ✅ Registered | [Guard Check Proof](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4) • [State Machine Proof](https://sepolia.etherscan.io/tx/0xee9e28b54ceeb871e1279a5dcccf99ca540af0b3b16571ecc17c619c28b01f07) |
 
 ## 🧪 Deployment
 
