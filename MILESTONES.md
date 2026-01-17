@@ -3,13 +3,13 @@
 ## 🎉 Current Status: v0.1 LIVE & OPERATIONAL
 **Last Updated:** January 2026
 
-| Component | Status | Details |
-|-----------|--------|---------|
-| **Protocol Specification** | ✅ Complete | [SPECIFICATION.md](./SPECIFICATION.md) |
-| **Registry Contract** | ✅ Verified on Sepolia | [0x83e7593...DBfF89131](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131) |
-| **Proof Builder dApp** | ✅ Fully Functional | [tools/oaps-signer-dapp.html](./tools/oaps-signer-dapp.html) |
-| **Documentation Suite** | ✅ Complete | Specification + Getting Started Guide + Milestones |
-| **First Proof Registered** | ✅ On-Chain Verified | Transaction hash below |
+| Component                  | Status              | Details / Link                                                                 |
+|----------------------------|---------------------|--------------------------------------------------------------------------------|
+| **Protocol Specification** | ✅ Complete         | [SPECIFICATION.md](./SPECIFICATION.md)                                         |
+| **Registry Contract**      | ✅ Verified on Sepolia | [0x83e7593...DBfF89131](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131) |
+| **Proof Builder dApp**     | ✅ Fully Functional | [Live](https://oaps-signer-dapp.vercel.app) (source: `tools/index.html`)       |
+| **Documentation Suite**    | ✅ Complete         | Specification + Getting Started Guide + Milestones                             |
+| **First Proof Registered** | ✅ On-Chain Verified | [View Transaction](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4) |
 
 ## 🚀 January 2026 - v0.1 Launch
 
@@ -22,12 +22,12 @@
 - **Block:** 10032252
 
 ### 📦 Components Completed
-1. ✅ **OAPS v0.1 Specification** (`SPECIFICATION.md`) - The canonical protocol standard
-2. ✅ **Registry Smart Contract** (`OAPSRegistryV0`) - Verified and live on Sepolia
-3. ✅ **Proof Builder & Registry dApp** - Complete web interface for end-to-end workflow
-4. ✅ **Getting Started Guide** (`GETTING_STARTED.md`) - Comprehensive documentation
-5. ✅ **Milestone Tracking** (`MILESTONES.md`) - This document
-6. ✅ **First End-to-End Workflow** - Proof generation → canonicalization → hashing → signing → on-chain registration → verification
+1. ✅ **OAPS v0.1 Specification** (`SPECIFICATION.md`) — The canonical protocol standard
+2. ✅ **Registry Smart Contract** (`OAPSRegistryV0`) — Verified and live on Sepolia
+3. ✅ **Proof Builder & Registry dApp** — Complete web interface for end-to-end workflow
+4. ✅ **Getting Started Guide** (`GETTING_STARTED.md`) — Comprehensive documentation
+5. ✅ **Milestone Tracking** (`MILESTONES.md`) — This document
+6. ✅ **First End-to-End Workflow** — Proof generation → canonicalization → hashing → signing → on-chain registration → verification
 
 ### 🧪 What This Proves
 - **Technical Soundness**: The OAPS protocol is operational and technically sound
@@ -46,50 +46,51 @@
 - [ ] **Establish Feedback Loop** for protocol improvements
 
 ### Pilot Success Metrics
-| Metric | Target | Current | Status |
-|--------|--------|---------|--------|
-| Registered Proofs | 10+ | 1 | 🔄 In Progress |
-| Active Pilot Auditors | 3-5 | 0 | ⏳ Not Started |
-| dApp Usage Sessions | 20+ | 1 | 🔄 In Progress |
-| Feedback Points Collected | 15+ | 0 | ⏳ Not Started |
+
+| Metric                     | Target   | Current | Status       |
+|----------------------------|----------|---------|--------------|
+| Registered Proofs          | 10+      | 1       | 🔄 In Progress |
+| Active Pilot Auditors      | 3-5      | 0       | ⏳ Not Started |
+| dApp Usage Sessions        | 20+      | 1       | 🔄 In Progress |
+| Feedback Points Collected  | 15+      | 0       | ⏳ Not Started |
 
 ## 🗺️ Future Roadmap
 
-### Phase 2: Accreditation Layer (Layer B) - Q1 2026
-- **Auditor Verification System** - Credential and reputation tracking
-- **Reputation Scoring Mechanism** - Transparent, algorithmic reputation
-- **Dispute Resolution Framework** - Community-governed dispute handling
-- **Accreditation Committee Formation** - Initial governance body
+### Phase 2: Accreditation Layer (Layer B) — Q1 2026
+- Auditor Verification System — Credential and reputation tracking
+- Reputation Scoring Mechanism — Transparent, algorithmic reputation
+- Dispute Resolution Framework — Community-governed dispute handling
+- Accreditation Committee Formation — Initial governance body
 
-### Phase 3: Shadow Operator (Layer C) - Q2 2026
-- **Revenue Model Implementation** - Sustainable funding mechanisms
-- **Service Offerings Definition** - Value-added services for ecosystem
-- **Funding Flywheel Activation** - Revenue → development → growth cycle
-- **Ecosystem Growth Initiatives** - Partnerships and adoption programs
+### Phase 3: Shadow Operator (Layer C) — Q2 2026
+- Revenue Model Implementation — Sustainable funding mechanisms
+- Service Offerings Definition — Value-added services for ecosystem
+- Funding Flywheel Activation — Revenue → development → growth cycle
+- Ecosystem Growth Initiatives — Partnerships and adoption programs
 
-### Phase 4: Mainnet & Scaling - H2 2026
-- **Ethereum Mainnet Deployment** - Production-ready registry
-- **Multi-Chain Support** - Cross-chain proof verification
-- **Enterprise API Development** - Programmatic access to OAPS
-- **Industry Standard Pursuit** - Formal recognition and adoption
+### Phase 4: Mainnet & Scaling — H2 2026
+- Ethereum Mainnet Deployment — Production-ready registry
+- Multi-Chain Support — Cross-chain proof verification
+- Enterprise API Development — Programmatic access to OAPS
+- Industry Standard Pursuit — Formal recognition and adoption
 
 ## 📊 Progress Tracking
 
-| Milestone | Target Date | Status | Verification |
-|-----------|-------------|--------|--------------|
-| v0.1 Specification Finalized | Jan 2026 | ✅ **Completed** | [SPECIFICATION.md](./SPECIFICATION.md) |
-| Registry Contract Deployed | Jan 2026 | ✅ **Completed** | [Etherscan Verified](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131#code) |
-| Proof Builder dApp Released | Jan 2026 | ✅ **Completed** | [tools/oaps-signer-dapp.html](./tools/oaps-signer-dapp.html) |
-| First Proof Registered | Jan 2026 | ✅ **Completed** | [Transaction Link](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4) |
-| Documentation Complete | Jan 2026 | ✅ **Completed** | Specification + Guides + Milestones |
-| Pilot Program Launch | Feb 2026 | 🔄 **Next** | Awaiting auditor onboarding |
-| First Real Audit Registration | Feb-Mar 2026 | ⏳ **Planned** | Following pilot testing |
+| Milestone                          | Target Date   | Status           | Verification                                                                 |
+|------------------------------------|---------------|------------------|------------------------------------------------------------------------------|
+| v0.1 Specification Finalized       | Jan 2026      | ✅ Completed      | [SPECIFICATION.md](./SPECIFICATION.md)                                       |
+| Registry Contract Deployed         | Jan 2026      | ✅ Completed      | [Etherscan Verified](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131#code) |
+| Proof Builder dApp Released        | Jan 2026      | ✅ Completed      | [Live dApp](https://oaps-signer-dapp.vercel.app)                             |
+| First Proof Registered             | Jan 2026      | ✅ Completed      | [Transaction Link](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4) |
+| Documentation Complete             | Jan 2026      | ✅ Completed      | Specification + Guides + Milestones                                          |
+| Pilot Program Launch               | Feb 2026      | 🔄 Next          | Awaiting auditor onboarding                                                  |
+| First Real Audit Registration      | Feb-Mar 2026  | ⏳ Planned        | Following pilot testing                                                      |
 
 ## 🤝 Get Involved
 
 ### For Auditors
 1. Review the [Getting Started Guide](./GETTING_STARTED.md) for complete workflow instructions
-2. Test the [Proof Builder dApp](./tools/oaps-signer-dapp.html) on Sepolia testnet
+2. Test the [Proof Builder dApp](https://oaps-signer-dapp.vercel.app) on Sepolia testnet
 3. Request participation in the pilot audit program
 
 ### For Developers & Security Researchers
