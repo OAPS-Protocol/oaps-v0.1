@@ -1,12 +1,12 @@
-
 # Getting Started with OAPS v0.1
 
 ## 🎯 Quick Overview
 
-The Open Audit Proof Standard (OAPS) provides **immutable, verifiable proof** of audit existence, integrity, and source. It separates **proof of fact** from **judgment of quality**.
+The Open Audit Proof Standard (OAPS) provides **immutable, verifiable proof** of audit existence, integrity, and source.  
+It separates **proof of fact** from **judgment of quality**.
 
-**Core Principle:** Validity ≠ Quality
-- A **valid** OAPS proof guarantees data integrity and origin
+**Core Principle:** Validity ≠ Quality  
+- A **valid** OAPS proof guarantees data integrity and origin  
 - It does **not** guarantee audit correctness or system security
 
 ## 🚀 For Auditors: Register Your First Proof
@@ -19,37 +19,39 @@ The Open Audit Proof Standard (OAPS) provides **immutable, verifiable proof** of
 ### 2. Step-by-Step Workflow
 
 #### Step 1: Open the Proof Builder
-Navigate to: `https://oaps-protocol.github.io/oaps-v0.1/tools/oaps-signer-dapp.html`
+Navigate to the live dApp:  
+**[https://oaps-signer-dapp.vercel.app](https://oaps-signer-dapp.vercel.app)**  
+(Source: `tools/index.html` in the repository)
 
 #### Step 2: Build Your Proof
 Fill in the form with your audit details:
 - **Audit ID**: Click "Generate UUID" or use your own UUIDv4
 - **Project Details**: Name, contract address, blockchain
-- **Auditor Address**: Your Ethereum address (will auto-fill when you connect wallet)
+- **Auditor Address**: Your Ethereum address (auto-fills when you connect wallet)
 - **Code Reference**: Git commit hash (40-character SHA-1)
 - **Report Hash**: SHA-256 hash of your audit report PDF
 
 #### Step 3: Generate Hash
-Click **"Build Proof & Generate Hash"**
-- The system will canonicalize your proof data
-- A unique `proofHash` will be generated and auto-filled
+Click **"Build Proof & Generate Hash"**  
+- The system canonicalizes your proof data  
+- A unique `proofHash` is generated and auto-filled  
 - Example: `0x5f9c4abaf2f2b...`
 
 #### Step 4: Connect Wallet & Sign
 1. Click **"Connect MetaMask"** and switch to **Sepolia Testnet**
 2. Click **"Sign Proof Hash"** to create a cryptographic signature
-3. Your signature will appear in the "Signature" field
+3. Your signature appears in the "Signature" field
 
 #### Step 5: Register On-Chain
-1. Click **"Register Proof"**
+1. Click **"Register Proof (Send Transaction)"**
 2. Approve the transaction in MetaMask (~$0.01 in Sepolia ETH)
 3. Wait for confirmation (typically 15-30 seconds)
-4. Transaction link to Etherscan will appear
+4. Transaction link to Etherscan appears
 
 #### Step 6: Verify Registration
 1. Click **"Check Registration Time"**
-2. System will confirm your proof is registered on-chain
-3. You'll see the exact timestamp of registration
+2. System confirms your proof is registered on-chain
+3. Exact timestamp of registration is displayed
 
 ### 3. Example Proof JSON Structure
 ```json
@@ -72,7 +74,7 @@ Click **"Build Proof & Generate Hash"**
 }
 ```
 
-4. Generating Hashes Programmatically
+### 4. Generating Hashes Programmatically
 
 If you need to generate proof hashes outside the dApp:
 
@@ -89,24 +91,22 @@ function generateProofHash(proofObject) {
 }
 ```
 
-🔍 For Projects: Verify Audit Proofs
+## 🔍 For Projects: Verify Audit Proofs
 
-1. On-Chain Verification
+### 1. On-Chain Verification
 
-Contract Address: 0x83e7593D3c8343437d92094d9485D6eDBfF89131
+**Contract Address:** `0x83e7593D3c8343437d92094d9485D6eDBfF89131`
 
-Methods:
+**Methods:**
+- Check registration: `registrationTime(proofHash)` → returns timestamp (or 0 if not found)
+- Verify proof: `verifyProof(proofHash)` → returns timestamp
 
-· Check registration: registrationTime(proofHash) → returns timestamp (or 0 if not found)
-· Verify proof: verifyProof(proofHash) → returns timestamp
-
-Direct Verification:
-
-1. Visit: Sepolia Etherscan
+**Direct Verification:**
+1. Visit [Sepolia Etherscan](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131)
 2. Enter the proofHash provided by your auditor
-3. Call registrationTime() to verify registration
+3. Call `registrationTime()` to verify registration
 
-2. Independent Verification Protocol
+### 2. Independent Verification Protocol
 
 Any third party can verify without trusting OAPS:
 
@@ -116,15 +116,15 @@ Any third party can verify without trusting OAPS:
 4. Check Registry: Query the OAPS registry with the computed hash
 5. Validate: Confirm the auditor address matches the signer
 
-3. What Verification Confirms
+### 3. What Verification Confirms
 
-✅ Existence: Proof was registered at a specific time
-✅ Integrity: Data has not been altered since registration
-✅ Source: Specific auditor cryptographically signed it
+✅ Existence: Proof was registered at a specific time  
+✅ Integrity: Data has not been altered since registration  
+✅ Source: Specific auditor cryptographically signed it  
 
 ❌ NOT Verified: Audit quality, findings accuracy, or system security
 
-🛠️ Technical Integration
+## 🛠️ Technical Integration
 
 For Developers: API Access
 
@@ -139,37 +139,38 @@ const contractABI = [
 const registryAddress = "0x83e7593D3c8343437d92094d9485D6eDBfF89131";
 ```
 
-For Security Researchers
+## For Security Researchers
 
-· Audit the standard: SPECIFICATION.md
-· Review the contract: Etherscan Source
-· Test the system: Use Sepolia testnet for experimentation
+- Audit the standard: [SPECIFICATION.md](./SPECIFICATION.md)
+- Review the contract: [Etherscan Source](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131#code)
+- Test the system: Use Sepolia testnet for experimentation
 
-❓ Troubleshooting
+## ❓ Troubleshooting
 
-Common Issues & Solutions
+**Common Issues & Solutions**
 
-Issue Solution
-"MetaMask not detected" Install MetaMask extension
-"Wrong network" Switch to Sepolia Testnet in MetaMask
-"Invalid hash" Ensure hash is 66 characters (0x + 64 hex)
-"Transaction failed" Ensure you have Sepolia ETH (get from faucet)
-"Proof not found" Verify the proofHash is correctly computed
+| Issue                        | Solution                                                               |
+|------------------------------|------------------------------------------------------------------------|
+| "MetaMask not detected"      | Install MetaMask extension                                             |
+| "Wrong network"              | Switch to Sepolia Testnet in MetaMask                                  |
+| "Invalid hash"               | Ensure hash is 66 characters (0x + 64 hex)                             |
+| "Transaction failed"         | Ensure you have Sepolia ETH (get from faucet)                          |
+| "Proof not found"            | Verify the proofHash is correctly computed                             |
 
-Getting Test ETH
+**Getting Test ETH**
 
-1. Visit a Sepolia faucet: sepoliafaucet.com or faucet.quicknode.com
+1. Visit a Sepolia faucet: [sepoliafaucet.com](https://sepoliafaucet.com) or [faucet.quicknode.com](https://faucet.quicknode.com)
 2. Enter your wallet address
 3. Receive 0.1-0.5 Sepolia ETH (enough for 10-50 registrations)
 
-📚 Resources
+## 📚 Resources
 
-· Full Specification: SPECIFICATION.md
-· Proof Builder dApp: tools/oaps-signer-dapp.html
-· Live Contract: Sepolia Etherscan
-· Project Roadmap: MILESTONES.md
+- Full Specification: [SPECIFICATION.md](./SPECIFICATION.md)
+- Proof Builder dApp: [Live](https://oaps-signer-dapp.vercel.app) (source: `tools/index.html`)
+- Live Contract: [Sepolia Etherscan](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131)
+- Project Roadmap: [MILESTONES.md](./MILESTONES.md)
 
-🆘 Support
+## 🆘 Support
 
 For technical issues or questions:
 
@@ -181,7 +182,5 @@ For technical issues or questions:
 
 Remember: OAPS verifies proofs, not promises. Always conduct your own due diligence.
 
-Last Updated: January 2024 | OAPS v0.1
-
-
+**Last Updated:** January 2026 | OAPS v0.1
 
