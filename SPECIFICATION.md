@@ -211,5 +211,5 @@ Amendments to this specification will follow the **OAPS Improvement Proposal (OI
 1. All hashes are represented as lowercase hexadecimal strings **without** the `0x` prefix in the JSON schema. The `keccak256` function expects a raw byte array.
 2. The blockchain identifier should follow the Chainlist naming convention where applicable.
 3. This document is the protocol. Implementations **must** adhere to it exactly to achieve interoperability.
-```
+
 
