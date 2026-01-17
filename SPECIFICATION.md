@@ -2,11 +2,9 @@
 
 ## 1. Preamble: A Protocol for Truth
 
-This document defines the **Open Audit Proof Standard (OAPS) v0.1**.  
-Its purpose is to establish a canonical, cryptographically-verifiable record of an audit's existence and content, **independent of any judgment of quality**.
+This document defines the Open Audit Proof Standard (OAPS) v0.1. Its purpose is to establish a canonical, cryptographically-verifiable record of an audit's existence and content, independent of any judgment of quality.
 
-An OAPS Proof is a **proof of fact, not a promise of safety**.  
-It answers three questions:
+An OAPS Proof is a **proof of fact, not a promise of safety**. It answers three questions:
 
 1. **Existence**: Did this audit exist at a specific time?
 2. **Integrity**: Has the audit record been altered?
@@ -16,10 +14,7 @@ It answers three questions:
 
 **Validity ≠ Quality**
 
-A **valid** OAPS proof guarantees the data's integrity and origin.  
-It does **not** guarantee the audit's correctness, thoroughness, or the security of the audited system.  
-
-This distinction is fundamental to the protocol's neutrality and defensibility.
+A **valid** OAPS proof guarantees the data's integrity and origin. It does **not** guarantee the audit's correctness, thoroughness, or the security of the audited system. This distinction is fundamental to the protocol's neutrality and defensibility.
 
 ## 3. The Proof Schema: A Deterministic Blueprint
 
@@ -132,7 +127,6 @@ The proof is a JSON object. The following schema is the single source of truth f
     }
   }
 }
-
 4. The Canon: Rules for Deterministic Hashing
 To ensure global consensus on a proof's cryptographic fingerprint, the JSON object MUST be serialized into an identical string by all parties. The rules are absolute:
 Encoding: UTF-8.
