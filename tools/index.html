@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <title>OAPS v0.1 - Proof Builder & Registry</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Tailwind + custom config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              'oaps-bg': '#05050a',
+              'oaps-card': 'rgba(20, 20, 40, 0.6)',
+              'oaps-neon': '#00f0ff',
+              'oaps-purple': '#a855f7',
+              'oaps-success': '#22c55e',
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+      body {
+        background: linear-gradient(to bottom right, #05050a, #000000);
+        background-attachment: fixed;
+        background-size: cover;
+        color: #e2e8f0;
+        font-family: 'Inter', system-ui, sans-serif;
+        min-height: 100vh;
+        padding-bottom: 4rem; /* Extra bottom space to avoid white flash on scroll */
+      }
+      .font-mono { font-family: 'JetBrains Mono', monospace; }
+      .glass {
+        background: rgba(20, 20, 40, 0.6);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(0, 240, 255, 0.2);
+        border-radius: 1rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .glass:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 50px rgba(0,240,255,0.15);
+      }
+      .btn-primary {
+        background: linear-gradient(45deg, #00f0ff, #00b8d9);
+        color: black;
+        font-weight: 600;
+        box-shadow: 0 0 20px rgba(0,240,255,0.5);
+        transition: all 0.3s;
+      }
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 0 35px rgba(0,240,255,0.8);
+      }
+      input, select {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: white;
+        border-radius: 0.75rem;
+        padding: 0.85rem 1rem;
+        width: 100%;
+      }
+      input:focus, select:focus {
+        outline: none;
+        border-color: #00f0ff;
+        box-shadow: 0 0 0 3px rgba(0,240,255,0.25);
+      }
+      .status {
+        background: rgba(0,0,0,0.5);
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        word-break: break-all;
+      }
+      .contract-display {
+        word-break: break-all;
+        font-size: 0.9rem;
+        background: rgba(0,0,0,0.4);
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        margin-top: 0.5rem;
+        display: block;
+      }
+      .glow-text { text-shadow: 0 0 10px rgba(0,240,255,0.6); }
+      #specModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.85);
+        z-index: 9999;
+        overflow-y: auto;
+      }
+      #specContent {
+        max-width: 900px;
+        margin: 4rem auto;
+        padding: 2rem;
+        background: #0f0f1a;
+        border-radius: 1rem;
+        border: 1px solid rgba(0,240,255,0.3);
+      }
+      .markdown-body { color: #e2e8f0; line-height: 1.7; }
+      .markdown-body h1, .markdown-body h2, .markdown-body h3 { color: #00f0ff; margin-top: 1.5em; }
+      .markdown-body pre { background: #000; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+      .markdown-body code { background: #111; padding: 0.2em 0.4em; border-radius: 0.25rem; }
+      @media (max-width: 640px) {
+        .glass { padding: 1.5rem; }
+      }
+    </style>
+</head>
+<body class="min-h-screen bg-fixed py-10 px-4 sm:px-6 lg:px-8 bg-oaps-bg">
+
+    <div class="max-w-4xl mx-auto space-y-10">
+
+        <header class="text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white glow-text">🔐 OAPS v0.1 - Proof Builder & Registry</h1>
+            <p class="text-lg text-gray-300 mt-3">Build a canonical audit proof, generate its hash, sign it, and register it on-chain.</p>
+            <div class="mt-4 inline-block px-5 py-2 bg-red-900/50 border border-red-600/50 rounded-full text-red-300 text-sm font-medium">
+                ⚠️ Sepolia Testnet required – prevents real ETH loss
+            </div>
+        </header>
+
+        <!-- 1. Network & Wallet -->
+        <div class="glass p-6 md:p-8">
+            <h3 class="text-2xl font-semibold text-oaps-neon mb-6">1. Network & Wallet</h3>
+            <div id="networkStatus" class="status mb-6">Checking network...</div>
+            <button id="connectButton" disabled class="btn-primary px-8 py-4 rounded-xl text-lg w-full md:w-auto">
+                🦊 Connect MetaMask
+            </button>
+            <p class="mt-6 text-gray-300">
+                Connected Account: 
+                <span id="accountAddress" class="status inline-block ml-2 font-mono">Not connected</span>
+            </p>
+        </div>
+
+        <!-- 2. Build Your Proof -->
+        <div class="glass p-6 md:p-8">
+            <h3 class="text-2xl font-semibold text-oaps-neon mb-6">🔧 2. Build Your Proof</h3>
+            <p class="text-gray-300 mb-8">Fill in your audit details. The tool will create the canonical OAPS proof and compute its hash.</p>
+
+            <label class="block text-sm font-medium text-gray-300 mb-2"><strong>Audit ID (UUID v4):</strong></label>
+            <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                <input type="text" id="auditId" class="flex-1"/>
+                <button class="btn-primary px-6 py-3 rounded-xl text-sm whitespace-nowrap mt-2 sm:mt-0" onclick="generateUUID()" type="button">
+                    Generate UUID
+                </button>
+            </div>
+
+            <label class="block text-sm font-medium text-gray-300 mb-2"><strong>Project Name:</strong></label>
+            <input type="text" id="projectName" class="mb-6"/>
+
+            <label class="block text-sm font-medium text-gray-300 mb-2"><strong>Contract Address:</strong></label>
+            <input type="text" id="projectAddress" class="mb-6"/>
+
+            <label class="block text-sm font-medium text-gray-300 mb-2"><strong>Blockchain:</strong></label>
+            <select id="blockchain" class="mb-6">
+                <option value="ethereum">Ethereum</option>
+                <option value="arbitrum">Arbitrum</option>
+                <option value="polygon">Polygon</option>
+                <option value="base">Base</option>
+                <option value="sepolia">Sepolia (Testnet)</option>
+            </select>
+
+            <label class="block text-sm font-medium text-gray-300 mb-2"><strong>Auditor Ethereum Address (Your ID):</strong></label>
+            <input type="text" id="auditorId" class="mb-6"/>
+
+            <label class="block text-sm font-medium text-gray-300 mb-2"><strong>Git Commit Hash (SHA-1, 40 chars):</strong></label>
+            <input type="text" id="commitHash" class="mb-6"/>
+
+            <label class="block text-sm font-medium text-gray-300 mb-2"><strong>Audit Report SHA-256 Hash (64 chars):</strong></label>
+            <input type="text" id="reportHash" class="mb-6"/>
+
+            <p class="text-sm font-medium text-gray-300 mb-4"><strong>Findings Summary (Optional):</strong></p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Critical</label>
+                    <input type="number" id="findingsCritical" min="0" value="0"/>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">High</label>
+                    <input type="number" id="findingsHigh" min="0" value="0"/>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Medium</label>
+                    <input type="number" id="findingsMedium" min="0" value="0"/>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Low</label>
+                    <input type="number" id="findingsLow" min="0" value="0"/>
+                </div>
+            </div>
+
+            <button id="buildProofButton" class="btn-primary px-8 py-5 rounded-xl text-lg w-full">
+                🛠️ Build Proof & Generate Hash
+            </button>
+
+            <div id="generatedOutput" style="display: none;" class="mt-8">
+                <div class="bg-green-900/30 border border-green-700/40 rounded-xl p-6">
+                    <h4 class="text-xl font-semibold text-oaps-success mb-3">✅ Proof Hash Generated!</h4>
+                    <p class="text-gray-300 mb-2"><strong>Your Proof Hash (ready to sign):</strong></p>
+                    <div class="status text-oaps-neon font-medium text-sm" id="generatedHash"></div>
+                    <p class="text-sm text-gray-400 mt-3">
+                        <small>This hash has been auto-filled below. Continue to sign it with your wallet.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Sign Proof Hash -->
+        <div class="glass p-6 md:p-8">
+            <h3 class="text-2xl font-semibold text-oaps-neon mb-6">3. Sign Proof Hash</h3>
+            <p class="text-gray-300 mb-4">Sign the generated hash with your wallet to create a cryptographic signature.</p>
+            <input type="text" id="proofHashInput" placeholder="0x1234..." readonly class="mb-6 font-mono w-full"/>
+            <button id="signButton" disabled class="btn-primary px-8 py-5 rounded-xl text-lg w-full">
+                ✍️ Sign Proof Hash
+            </button>
+            <p class="mt-6 text-gray-300">
+                Signature: <span id="signatureOutput" class="status inline-block ml-2">-</span>
+            </p>
+        </div>
+
+        <!-- 4. Register -->
+        <div class="glass p-6 md:p-8">
+            <h3 class="text-2xl font-semibold text-oaps-neon mb-6">4. Register on OAPS Registry</h3>
+            <p class="mb-4">
+                <strong>Contract:</strong>
+                <code class="contract-display text-oaps-neon">
+                    0x83e7593D3c8343437d92094d9485D6eDBfF89131
+                </code>
+                <span class="network-badge sepolia ml-3">Sepolia</span>
+            </p>
+            <button id="registerButton" disabled class="btn-primary px-8 py-5 rounded-xl text-lg w-full">
+                📝 Register Proof (Send Transaction)
+            </button>
+            <div id="transactionResult" class="mt-6 status">-</div>
+        </div>
+
+        <!-- 5. Verify -->
+        <div class="glass p-6 md:p-8">
+            <h3 class="text-2xl font-semibold text-oaps-neon mb-6">5. Verify Registration</h3>
+            <button id="verifyButton" disabled class="btn-primary px-8 py-5 rounded-xl text-lg w-full">
+                🔍 Check Registration Time
+            </button>
+            <p class="mt-6 text-gray-300">
+                Result: <span id="verificationResult" class="status inline-block ml-2">-</span>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-gray-500 text-sm mt-12 pt-8 border-t border-gray-800/50">
+            <p><strong>⚠️ Safety Notice:</strong> This dApp automatically enforces Sepolia Testnet to prevent accidental real ETH transactions.</p>
+            <p class="mt-2"><strong>Workflow:</strong> Build Proof → Connect → Sign → Register → Verify.</p>
+            <p class="mt-2">
+                <strong>Network:</strong> Sepolia Testnet only | 
+                <strong>Contract:</strong> Verified on 
+                <a href="https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131" target="_blank" class="text-oaps-neon hover:underline">
+                    Etherscan
+                </a>
+            </p>
+            <p class="mt-2">
+                <strong>OAPS v0.1 Specification:</strong> 
+                <button onclick="showSpecPreview()" class="text-oaps-neon hover:underline bg-transparent border-none cursor-pointer">
+                    View Preview
+                </button>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Specification Preview Modal -->
+    <div id="specModal">
+        <div id="specContent">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-oaps-neon">OAPS v0.1 Specification</h2>
+                <button onclick="closeSpecPreview()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <div id="specPreview" class="markdown-body prose prose-invert max-w-none"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        const SEPOLIA_CONFIG = {
+            chainId: "0xaa36a7",
+            chainName: "Sepolia",
+            registry: "0x83e7593D3c8343437d92094d9485D6eDBfF89131",
+            explorer: "https://sepolia.etherscan.io",
+            rpcUrl: "https://rpc.sepolia.org"
+        };
+
+        // ✅ CORRECT ABI (From Your Deployed Contract)
+        const contractABI = [
+            "function registerProof(bytes32 _proofHash, bytes memory _signature) external returns (bool)",
+            "function registrationTime(bytes32 _proofHash) external view returns (uint256)",
+            "function verifyProof(bytes32 _proofHash) external view returns (uint256)"
+        ];
+
+        // ==================== STATE ====================
+        let provider = null;
+        let signer = null;
+        let contract = null;
+        let userAddress = null;
+
+        // 🆕 PROOF BUILDER FUNCTIONS
+        function generateUUID() {
+            document.getElementById('auditId').value = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function sortObjectKeys(obj) {
+            if (typeof obj !== 'object' || obj === null) return obj;
+            if (Array.isArray(obj)) return obj.map(sortObjectKeys);
+            const sorted = {};
+            Object.keys(obj).sort().forEach(key => {
+                sorted[key] = sortObjectKeys(obj[key]);
+            });
+            return sorted;
+        }
+
+        document.getElementById('buildProofButton').onclick = function() {
+            console.log("🛠️ Build Proof button clicked");
+
+            try {
+                const auditId = document.getElementById('auditId').value.trim();
+                const projectName = document.getElementById('projectName').value.trim();
+                const projectAddress = document.getElementById('projectAddress').value.trim();
+                const blockchain = document.getElementById('blockchain').value;
+                const auditorId = document.getElementById('auditorId').value.trim();
+                const commitHash = document.getElementById('commitHash').value.trim();
+                const reportHash = document.getElementById('reportHash').value.trim();
+                const findingsCritical = parseInt(document.getElementById('findingsCritical').value) || 0;
+                const findingsHigh = parseInt(document.getElementById('findingsHigh').value) || 0;
+                const findingsMedium = parseInt(document.getElementById('findingsMedium').value) || 0;
+                const findingsLow = parseInt(document.getElementById('findingsLow').value) || 0;
+
+                console.log("📝 Form values collected:", {
+                    auditId, projectName, projectAddress, blockchain, 
+                    auditorId, commitHash, reportHash
+                });
+
+                if (!auditId) {
+                    alert('❌ Audit ID is required');
+                    return;
+                }
+                if (!auditId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)) {
+                    alert('❌ Please enter a valid UUID v4 for Audit ID');
+                    return;
+                }
+                if (!projectAddress.startsWith('0x') || projectAddress.length !== 42) {
+                    alert('❌ Please enter a valid 42-character Ethereum address (starting with 0x)');
+                    return;
+                }
+                if (!commitHash.match(/^[a-f0-9]{40}$/i)) {
+                    alert('❌ Commit hash must be 40-character SHA-1 hash');
+                    return;
+                }
+                if (!reportHash.match(/^[a-f0-9]{64}$/i)) {
+                    alert('❌ Report hash must be 64-character SHA-256 hash');
+                    return;
+                }
+
+                const proof = {
+                    oapsVersion: "0.1.0",
+                    auditId: auditId,
+                    project: {
+                        name: projectName,
+                        address: projectAddress,
+                        blockchain: blockchain
+                    },
+                    auditor: {
+                        id: auditorId
+                    },
+                    auditScope: {
+                        commitHash: commitHash,
+                        files: []
+                    },
+                    reportHash: reportHash,
+                    timestamp: new Date().toISOString().split('.')[0] + 'Z'
+                };
+
+                if (findingsCritical > 0 || findingsHigh > 0 || findingsMedium > 0 || findingsLow > 0) {
+                    proof.findingsSummary = { 
+                        critical: findingsCritical, 
+                        high: findingsHigh, 
+                        medium: findingsMedium, 
+                        low: findingsLow 
+                    };
+                }
+
+                console.log("📦 Proof object built:", proof);
+
+                console.log("🔢 Starting canonicalization...");
+                const sortedProof = sortObjectKeys(proof);
+                const canonicalString = JSON.stringify(sortedProof, null, '');
+                console.log("📄 Canonical string:", canonicalString);
+
+                const proofHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(canonicalString));
+                console.log("🔐 Proof hash generated:", proofHash);
+
+                document.getElementById('generatedHash').textContent = proofHash;
+                document.getElementById('generatedOutput').style.display = 'block';
+                document.getElementById('proofHashInput').value = proofHash;
+
+                document.getElementById('signButton').disabled = false;
+
+                document.getElementById('generatedOutput').scrollIntoView({ behavior: 'smooth' });
+
+                console.log("✅ Proof hash successfully generated and displayed!");
+
+            } catch (error) {
+                console.error("❌ Error building proof:", error);
+                alert("Error building proof: " + error.message);
+            }
+        };
+
+        async function checkAndSwitchToSepolia() {
+            const networkStatus = document.getElementById('networkStatus');
+            if (typeof window.ethereum === 'undefined') {
+                networkStatus.innerHTML = '<span class="error">❌ MetaMask not detected.</span>';
+                return false;
+            }
+            try {
+                const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (currentChainId === SEPOLIA_CONFIG.chainId) {
+                    networkStatus.innerHTML = `<span class="success">✅ Connected to Sepolia</span> <span class="network-badge sepolia">Sepolia</span>`;
+                    document.getElementById('connectButton').disabled = false;
+                    return true;
+                }
+                let networkName = "Unknown";
+                switch(currentChainId) {
+                    case "0x1": networkName = "Ethereum Mainnet"; break;
+                    case "0xaa36a7": networkName = "Sepolia"; break;
+                    default: networkName = `Chain ID: ${parseInt(currentChainId)}`;
+                }
+                networkStatus.innerHTML = `<span class="warning">⚠️ Current network: ${networkName}</span> <span class="network-badge other">Wrong Network</span>`;
+                try {
+                    networkStatus.innerHTML += `<br><span class="warning">⏳ Switching to Sepolia...</span>`;
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: SEPOLIA_CONFIG.chainId }],
+                    });
+                    networkStatus.innerHTML = `<span class="success">✅ Switched to Sepolia</span> <span class="network-badge sepolia">Sepolia</span>`;
+                    document.getElementById('connectButton').disabled = false;
+                    return true;
+                } catch (switchError) {
+                    if (switchError.code === 4902) {
+                        networkStatus.innerHTML += `<br><span class="warning">⏳ Adding Sepolia network...</span>`;
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [{
+                                chainId: SEPOLIA_CONFIG.chainId,
+                                chainName: 'Sepolia Testnet',
+                                nativeCurrency: { name: 'Sepolia ETH', symbol: 'ETH', decimals: 18 },
+                                rpcUrls: [SEPOLIA_CONFIG.rpcUrl],
+                                blockExplorerUrls: [SEPOLIA_CONFIG.explorer]
+                            }],
+                        });
+                        networkStatus.innerHTML = `<span class="success">✅ Sepolia added and connected</span> <span class="network-badge sepolia">Sepolia</span>`;
+                        document.getElementById('connectButton').disabled = false;
+                        return true;
+                    }
+                    networkStatus.innerHTML = `<span class="error">❌ Please switch to Sepolia manually</span>`;
+                    return false;
+                }
+            } catch (error) {
+                networkStatus.innerHTML = `<span class="error">❌ Network error: ${error.message}</span>`;
+                return false;
+            }
+        }
+
+        document.getElementById('connectButton').onclick = async () => {
+            const networkOk = await checkAndSwitchToSepolia();
+            if (!networkOk) return;
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                userAddress = await signer.getAddress();
+                document.getElementById('accountAddress').textContent = userAddress;
+                document.getElementById('accountAddress').style.color = "green";
+                contract = new ethers.Contract(SEPOLIA_CONFIG.registry, contractABI, signer);
+                console.log("✅ Connected to Sepolia:", userAddress);
+                document.getElementById('connectButton').disabled = true;
+                document.getElementById('connectButton').textContent = "✅ Connected";
+
+                const auditorIdField = document.getElementById('auditorId');
+                if (!auditorIdField.value) {
+                    auditorIdField.value = userAddress;
+                }
+
+                window.ethereum.on('chainChanged', async (chainId) => {
+                    console.log("Network changed to:", chainId);
+                    if (chainId === SEPOLIA_CONFIG.chainId) {
+                        location.reload();
+                    } else {
+                        document.getElementById('networkStatus').innerHTML = 
+                            `<span class="error">⚠️ Switched away from Sepolia. Please switch back.</span>`;
+                        document.getElementById('connectButton').disabled = true;
+                    }
+                });
+            } catch (err) {
+                console.error("Connection error:", err);
+                alert("Connection failed: " + err.message);
+            }
+        };
+
+        document.getElementById('signButton').onclick = async () => {
+            if (!signer) { 
+                alert("Please connect wallet first!"); 
+                return; 
+            }
+            const proofHash = document.getElementById('proofHashInput').value.trim();
+            if (!proofHash.startsWith('0x') || proofHash.length !== 66) {
+                alert("Invalid hash. Must be 66 chars (0x + 64 hex)."); 
+                return;
+            }
+            try {
+                const signature = await signer.signMessage(ethers.utils.arrayify(proofHash));
+                document.getElementById('signatureOutput').textContent = signature;
+                document.getElementById('signatureOutput').style.color = "blue";
+                document.getElementById('registerButton').disabled = false;
+                document.getElementById('signButton').disabled = true;
+                document.getElementById('signButton').textContent = "✅ Signed";
+            } catch (err) { 
+                alert("Signing failed: " + err.message); 
+            }
+        };
+
+        document.getElementById('registerButton').onclick = async () => {
+            if (!contract) { 
+                alert("Contract not initialized."); 
+                return; 
+            }
+            const proofHash = document.getElementById('proofHashInput').value.trim();
+            const signature = document.getElementById('signatureOutput').textContent;
+            if (signature === '-') { 
+                alert("Please sign the hash first."); 
+                return; 
+            }
+            try {
+                const tx = await contract.registerProof(proofHash, signature);
+                document.getElementById('transactionResult').innerHTML = 
+                    `<span class="success">✅ Transaction sent: ${tx.hash}</span><br>
+                     <a href="\( {SEPOLIA_CONFIG.explorer}/tx/ \){tx.hash}" target="_blank">View on Etherscan</a>`;
+                const receipt = await tx.wait();
+                document.getElementById('transactionResult').innerHTML += 
+                    `<br><span class="success">✔️ Confirmed in block ${receipt.blockNumber}</span>`;
+                document.getElementById('verifyButton').disabled = false;
+                document.getElementById('registerButton').disabled = true;
+                document.getElementById('registerButton').textContent = "✅ Registered";
+            } catch (err) {
+                document.getElementById('transactionResult').innerHTML = 
+                    `<span class="error">❌ Failed: ${err.message}</span>`;
+            }
+        };
+
+        document.getElementById('verifyButton').onclick = async () => {
+            if (!contract) { 
+                alert("Contract not initialized."); 
+                return; 
+            }
+            const proofHash = document.getElementById('proofHashInput').value.trim();
+            if (!proofHash.startsWith('0x')) { 
+                alert("Enter a valid proof hash."); 
+                return; 
+            }
+            try {
+                const timestamp = await contract.registrationTime(proofHash);
+                if (timestamp.toString() === '0') {
+                    document.getElementById('verificationResult').innerHTML = 
+                        `<span class="error">❌ Proof not found in registry (timestamp: 0)</span>`;
+                } else {
+                    const dateStr = new Date(Number(timestamp) * 1000).toISOString();
+                    document.getElementById('verificationResult').innerHTML = 
+                        `<span class="success">✅ Proof Registered!</span><br>
+                         <strong>Registration Time:</strong> ${dateStr}`;
+                    document.getElementById('verifyButton').disabled = true;
+                    document.getElementById('verifyButton').textContent = "✅ Verified";
+                }
+            } catch (err) {
+                document.getElementById('verificationResult').innerHTML = 
+                    `<span class="error">❌ Error: ${err.message}</span>`;
+            }
+        };
+
+        // Initialize
+        window.addEventListener('load', async () => {
+            await checkAndSwitchToSepolia();
+        });
+
+        // Specification Preview Modal
+        async function showSpecPreview() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/OAPS-Protocol/oaps-v0.1/main/SPECIFICATION.md');
+                const mdText = await response.text();
+                document.getElementById('specPreview').innerHTML = marked.parse(mdText);
+                document.getElementById('specModal').style.display = 'block';
+            } catch (err) {
+                alert('Failed to load specification preview');
+            }
+        }
+
+        function closeSpecPreview() {
+            document.getElementById('specModal').style.display = 'none';
+        }
+    </script>
+
+    <!-- Modal for Specification Preview -->
+    <div id="specModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;overflow-y:auto;">
+        <div style="max-width:900px;margin:4rem auto;padding:2rem;background:#0f0f1a;border-radius:1rem;border:1px solid rgba(0,240,255,0.3);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+                <h2 style="font-size:1.75rem;font-weight:bold;color:#00f0ff;">OAPS v0.1 Specification</h2>
+                <button onclick="closeSpecPreview()" style="color:#9ca3af;font-size:2rem;background:none;border:none;cursor:pointer;">&times;</button>
+            </div>
+            <div id="specPreview" class="markdown-body" style="color:#e2e8f0;line-height:1.7;"></div>
+        </div>
+    </div>
+
+</body>
+</html>
