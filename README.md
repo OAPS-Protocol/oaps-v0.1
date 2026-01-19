@@ -52,6 +52,73 @@ OAPS provides foundational infrastructure for verifying professional work across
 | **Documentation Suite** | ✅ Complete | Guides, Milestones, and Full Specification |
 | **Pilot Proofs** | ✅ Registered | [Guard Check Proof](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4) • [State Machine Proof](https://sepolia.etherscan.io/tx/0xee9e28b54ceeb871e1279a5dcccf99ca540af0b3b16571ecc17c619c28b01f07) |
 
+## End-to-End Workflow
+
+This diagram maps the complete path for creating and verifying an OAPS proof. It involves off-chain actions, on-chain operations, and public verification.
+
+┌─────────────────────┐
+                      │  Auditor / Project  │
+                      │   (e.g., OAPS dApp) │
+                      └──────────┬──────────┘
+                                 │
+[Off-Chain]                     │ 1. Generate Audit Report
+                                 │
+                ┌────────────────▼────────────────┐
+                │  2. Build Canonical OAPS Proof  │
+                │  (Structured JSON per spec)     │
+                └────────────────┬────────────────┘
+                                 │
+                ┌────────────────▼────────────────┐
+                │   3. Generate Proof Hash        │
+                │   (keccak256 of JSON)           │
+                └────────────────┬────────────────┘
+                                 │
+                ┌────────────────▼────────────────┐
+                │      4. Sign Hash               │
+                │ (with Auditor's Private Key)    │
+                └────────────────┬────────────────┘
+                                 │
+[On-Chain]                       │
+                ┌────────────────▼────────────────┐
+                │  5. Register on OAPS Registry   │
+                │     (Smart Contract Call)       │
+                │ ┌────────────────────────────┐ │
+                │ │ OAPSRegistryV0             │ │
+                │ │ - Stores Proof Hash        │ │
+                │ │ - Stores Signature         │ │
+                │ │ - Timestamps (block time)  │ │
+                │ │ - Emits Event              │ │
+                │ └────────────────────────────┘ │
+                └────────────────┬────────────────┘
+                                 │
+                                 ▼
+    ┌─────────────────────────────────────────────┐
+    │            Ethereum Sepolia Testnet         │
+    │  (Immutable, Public, Verifiable Ledger)     │
+    └────────────────┬────────────────────────────┘
+                     │
+[Verification]       │
+    ┌───────────────▼────────────────┐
+    │         Public / Investors /    │
+    │   Projects / DAOs / Analysts    │
+    └───────────────┬────────────────┘
+                    │
+Two Verification Paths:
+┌─────────────────────────────────────────┐
+│                                         │
+│ A. On-Chain Lookup:                     │
+│    Query the OAPSRegistryV0 contract    │
+│    with a Proof Hash to confirm its     │
+│    registration timestamp and auditor.  │
+│                                         │
+│ B. Cryptographic Proof:                 │
+│    1. Recreate the Proof Hash from the  │
+│       original JSON document.           │
+│    2. Use the signature to recover the  │
+│       signer's public address.          │
+│    3. Match against on-chain record.    │
+└─────────────────────────────────────────┘
+
 ## 🧪 Deployment
 
 **Sepolia Testnet (v0.1)** — Official pilot registry.
