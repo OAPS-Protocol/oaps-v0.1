@@ -123,6 +123,26 @@
       @media (max-width: 640px) {
         .glass { padding: 1.5rem; }
       }
+      /* New styles for pilots */
+      .pilot-hash {
+        font-family: 'JetBrains Mono', monospace;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+        color: #00f0ff; /* Use your neon for better contrast */
+        background: rgba(0, 240, 255, 0.05); /* Subtle neon tint */
+        padding: 4px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin: 4px 0;
+      }
+      .pilot-card {
+        background: rgba(20, 20, 40, 0.8) !important; /* Darker glass-like to match theme */
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        color: #e2e8f0;
+        margin: 20px 0;
+        padding: 15px;
+        border-radius: 8px;
+      }
     </style>
 </head>
 <body class="min-h-screen bg-fixed py-10 px-4 sm:px-6 lg:px-8 bg-oaps-bg">
@@ -261,6 +281,34 @@
             <p class="mt-6 text-gray-300">
                 Result: <span id="verificationResult" class="status inline-block ml-2">-</span>
             </p>
+        </div>
+
+        <!-- New Section: Live Registered Proofs (Pilots) -->
+        <div class="glass p-6 md:p-8">
+            <h3 class="text-2xl font-semibold text-oaps-neon mb-6">Live Registered Proofs (Pilots)</h3>
+            <p class="text-gray-300 mb-4">These immutable proofs are already on Sepolia — verify them via Etherscan or by recreating the JSON hash!</p>
+
+            <div class="pilot-card">
+              <strong>Guard Check Pilot</strong><br>
+              Security pattern demo & audit proof<br>
+              <strong>Proof Hash:</strong> 
+              <span class="pilot-hash">0x28d823138f5aa3a59b2a3c84155f4d0a8720a76dac090801a20339bc0effbae5</span><br>
+              Registered Tx: <a href="https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4" target="_blank" style="color: #00f0ff;">
+                View on Etherscan
+              </a>
+            </div>
+
+            <div class="pilot-card">
+              <strong>State Machine Pilot</strong><br>
+              Canonical pattern implementation & audit documentation<br>
+              <strong>Proof Hash:</strong> 
+              <span class="pilot-hash">0xae4b7dec74637b139448015c632a2baabffc9c2b70783df5e1bffeaa06da60d3</span><br>
+              Registered Tx: <a href="https://sepolia.etherscan.io/tx/0xee9e28b54ceeb871e1279a5dcccf99ca540af0b3b16571ecc17c619c28b01f07" target="_blank" style="color: #00f0ff;">
+                View on Etherscan
+              </a>
+            </div>
+
+            <p class="text-gray-300">These are the first real proofs! More coming soon. Future versions will allow direct lookup by hash in the dApp.</p>
         </div>
 
         <!-- Footer -->
