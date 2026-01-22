@@ -143,6 +143,7 @@ OAPS is being developed as a sustainable, three-layer public good.
 *   An opt-in, transparent layer that reads from Layer A to compute track records and attestation histories.
 *   Provides data-driven insights, not qualitative ratings or guarantees.
 *   **Status:** 🔄 Research & Design (Q1 2026)
+*   **Public RFC draft now open**: [ACCREDITATION.md](./ACCREDITATION.md) – feedback welcome!
 
 **Layer C: Shadow Operator & Services (Sustainable Engine)**
 *   Premium services built atop the protocol: dashboards, enterprise APIs, monitoring, and compliance tooling.
