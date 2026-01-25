@@ -5,9 +5,9 @@ Proof of Fact, Curated by Incentives.
 
 OAPS defines a foundational primitive — the Credibility Atom — enabling the generation of non-transferable, history-dependent credibility signals for any agent (human or artificial) through economically bonded challenge games.
 
-https://img.shields.io/badge/License-MIT-blue.svg
-https://img.shields.io/badge/Status-v0.1%20Live-brightgreen
-https://img.shields.io/badge/Specification-CAS--001%20Draft-orange
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Status: v0.1 Live](https://img.shields.io/badge/Status-v0.1%20Live-brightgreen)](https://oaps-signer-dapp.vercel.app)
+[![Specification: CAS-001 Draft](https://img.shields.io/badge/Specification-CAS--001%20Draft-orange)](./SPECIFICATION.md)
 
 ---
 
