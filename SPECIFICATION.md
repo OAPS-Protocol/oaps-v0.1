@@ -1,4 +1,4 @@
-
+```markdown
 # Credibility Atom Specification (CAS-001)
 
 **Status:** DRAFT  
@@ -39,15 +39,15 @@ Current verification systems rely on trusted authorities or static proofs. There
 
 ## 3. Definitions
 
-| Term | Definition |
-|----|----|
-| Agent | Entity identified by a cryptographic key |
-| Credibility Atom | Atomic unit defined by this spec |
-| Base Proof | Structured claim (OAPS v0.1) |
-| Bond | Economic stake |
-| Challenge Window | Period for dispute |
-| Credibility Delta | Non-transferable signal |
-| Slashing | Economic penalty |
+| Term                     | Definition                                                                 |
+|--------------------------|----------------------------------------------------------------------------|
+| Agent                    | Entity identified by a cryptographic key                                   |
+| Credibility Atom         | Atomic unit defined by this spec                                           |
+| Base Proof               | Structured claim (OAPS v0.1 format)                                        |
+| Bond                     | Economic stake (ETH or ERC-20)                                             |
+| Challenge Window         | Period for dispute                                                         |
+| Credibility Delta        | Non-transferable signal produced by Layer B                                |
+| Slashing                 | Economic penalty on bond                                                   |
 
 ---
 
@@ -57,14 +57,21 @@ Current verification systems rely on trusted authorities or static proofs. There
 
 ```json
 {
-  "version": "CAS-001"
+  "version": "CAS-001",
+  "baseProof": {
+    // OAPS v0.1 proof object
+  },
+  "economicMetadata": {
+    "submissionBond": "string",           // wei as string
+    "challengeWindowSeconds": "integer",
+    "disputeResolverId": "string"
+  }
 }
+```
 
+### 4.2 Economic Metadata Schema
 
----
-
-4.2 Economic Metadata Schema
-
+```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Credibility Atom Economic Metadata",
@@ -103,200 +110,145 @@ Current verification systems rely on trusted authorities or static proofs. There
     }
   }
 }
+```
 
+### 4.3 Atom Commitment Hash
 
----
-
-4.3 Atom Commitment Hash
-
+```solidity
 atomHash = keccak256(
-  baseProofHash ||
-  agentAddress ||
-  submissionBond ||
-  challengeWindowSeconds ||
-  disputeResolverId
+  abi.encodePacked(
+    baseProofHash,
+    agentAddress,
+    submissionBond,
+    challengeWindowSeconds,
+    disputeResolverId
+  )
 )
-
-
----
-
-5. Lifecycle & State Machine
-
-5.1 States
-
-State	Description
-
-PENDING	Atom submitted, bond locked
-CHALLENGED	Active bonded dispute
-FINALIZED	Accepted, bond returned
-ECONOMICALLY_REJECTED	Invalidated, bond slashed
-
-
+```
 
 ---
 
-5.2 State Diagram
+## 5. Lifecycle & State Machine
 
+### 5.1 States
+
+| State                  | Description                                      |
+|------------------------|--------------------------------------------------|
+| PENDING                | Atom submitted, bond locked                      |
+| CHALLENGED             | Active bonded dispute                            |
+| FINALIZED              | Accepted, bond returned                          |
+| ECONOMICALLY_REJECTED  | Invalidated, bond slashed                        |
+
+### 5.2 State Diagram
+
+```mermaid
 flowchart LR
-  P[PENDING] -->|No Challenge| F[FINALIZED]
-  P -->|Challenge| C[CHALLENGED]
-  C -->|Submitter Wins| F
-  C -->|Challenger Wins| R[ECONOMICALLY_REJECTED]
-
-
----
-
-6. Bonded Challenge Mechanics
-
-6.1 Submission
-
-1. Prepare Base Proof
-
-
-2. Compute atomHash
-
-
-3. Sign hash
-
-
-4. Submit Atom with bond
-
-
-
-6.2 Challenge
-
-Any actor may challenge
-
-Challenger posts matching bond
-
-Atom enters CHALLENGED
-
-
-6.3 Dispute Resolution
-
-Random bonded jurors
-
-Commit–reveal voting
-
-≥ ⅔ supermajority
-
-
+    P[PENDING] -->|No Challenge| F[FINALIZED]
+    P -->|Challenge| C[CHALLENGED]
+    C -->|Submitter Wins| F
+    C -->|Challenger Wins| R[ECONOMICALLY_REJECTED]
+```
 
 ---
 
-6.4 Economic Settlement
+## 6. Bonded Challenge Mechanics
 
-Outcome	Submitter Bond	Challenger Bond
+### 6.1 Submission
 
-No Challenge	Returned	—
-Challenge Fails	Returned	Slashed
-Challenge Succeeds	Slashed	Returned
+1. Prepare Base Proof  
+2. Compute atomHash  
+3. Sign hash with agent key  
+4. Submit Atom with bond to Layer A  
 
+### 6.2 Challenge
 
+- Any actor may challenge during window  
+- Challenger posts matching bond  
+- Atom enters CHALLENGED state  
 
----
+### 6.3 Dispute Resolution (Default)
 
-7. Economic Invariants
+- Random bonded jurors  
+- Commit-reveal voting  
+- ≥ ⅔ supermajority decides outcome  
 
-7.1 Attack Cost
+### 6.4 Economic Settlement
 
-Attack Cost > Expected Fraud Profit
-
-7.2 Participation Incentive
-
-Expected Honest Challenge Reward > Challenge Cost
-
-7.3 Parameter Bounds
-
-Minimum bond ≥ 1 ETH
-
-Bond ratio = 1:1
-
-Window: 24h – 7d
-
-
+| Outcome              | Submitter Bond | Challenger Bond |
+|----------------------|----------------|-----------------|
+| No Challenge         | Returned       | —               |
+| Challenge Fails      | Returned       | Slashed         |
+| Challenge Succeeds   | Slashed        | Returned        |
 
 ---
 
-8. Security Model
+## 7. Economic Invariants
 
-Threat	Mitigation
-
-Sybil	High bonding
-Long con	Time decay
-Spam	Bond slashing
-Collusion	Random jurors
-Data loss	Decentralized storage
-
-
+7.1 Attack Cost > Expected Fraud Profit  
+7.2 Expected Honest Challenge Reward > Challenge Cost  
+7.3 Parameter Bounds  
+- Minimum bond ≥ 1 ETH  
+- Bond ratio = 1:1  
+- Window: 24h – 7d  
 
 ---
 
-9. Credibility Delta Framework
+## 8. Security Model
 
-9.1 Oracle Interface
+| Threat     | Mitigation                     |
+|------------|--------------------------------|
+| Sybil      | High bonding requirement       |
+| Long con   | Time decay & history weighting |
+| Spam       | Bond slashing                  |
+| Collusion  | Random juror selection         |
+| Data loss  | Decentralized storage (IPFS)   |
 
+---
+
+## 9. Credibility Delta Framework
+
+### 9.1 Oracle Interface
+
+```solidity
 interface ICredibilityOracle {
   function computeDelta(
     address agent,
-    bytes32[] calldata finalized,
-    bytes32[] calldata rejected
-  ) external view returns (int256);
+    bytes32[] calldata finalizedAtoms,
+    bytes32[] calldata rejectedAtoms
+  ) external view returns (int256 delta);
 }
+```
 
-9.2 Principles
+### 9.2 Principles
 
-Non-transferable
-
-History-dependent
-
-Stake-weighted
-
-Time-decaying
-
-
+- Non-transferable  
+- History-dependent  
+- Stake-weighted  
+- Time-decaying  
 
 ---
 
-10. Implementation Guidelines
+## 10. Implementation Guidelines
 
-Enforce lifecycle & slashing
-
-Store proofs on IPFS/Arweave
-
-Emit metadata events
-
-Wrap v0.1 proofs
-
-
+- Enforce lifecycle & slashing in Layer A  
+- Store full proofs on IPFS/Arweave  
+- Emit rich metadata events  
+- Wrap existing v0.1 proofs as base layer  
 
 ---
 
-11. Governance & Versioning
+## 11. Governance & Versioning
 
-Activated at mainnet deployment
-
-Changes via CAIP
-
-Backward compatibility required
-
-
+- Activated at mainnet deployment  
+- Changes via CAIP (Credibility Atom Improvement Proposal)  
+- Backward compatibility required  
 
 ---
 
-12. References
+## 12. References
 
-1. OAPS v0.1
-
-
-2. EIP-712
-
-
-3. Kleros
-
-
-4. Augur
-
-
-
-
+1. OAPS v0.1 Registry Specification  
+2. EIP-712 Structured Data Signing  
+3. Kleros Dispute Resolution  
+4. Augur Prediction Market Mechanics  
+```
