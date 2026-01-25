@@ -1,135 +1,243 @@
-# 🧠 OAPS Protocol — Credibility Atom Protocol
+```markdown
+# 🧠 OAPS Protocol — The Credibility Atom Protocol
 
-**Neutral, adversarial substrate for verifiable trust.**  
-OAPS evolves a simple proof registry into a dynamic protocol where credibility emerges from economic incentives and bonded challenges.  
+> A neutral, adversarial substrate for trust.  
+> Proof of Fact, Curated by Incentives.
 
-**Proof of Fact, Curated by Game Theory.**
+OAPS defines a foundational primitive — the **Credibility Atom** — enabling the generation of non-transferable, history-dependent credibility signals for any agent (human or artificial) through economically bonded challenge games.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![v0.1 Foundation Live](https://img.shields.io/badge/v0.1%20Foundation-Live-brightgreen)](https://oaps-signer-dapp.vercel.app)
-[![CAS-001 Draft](https://img.shields.io/badge/Spec-CAS--001%20Draft-orange)](./SPECIFICATION.md)
-[![Sepolia Testnet](https://img.shields.io/badge/Network-Sepolia-purple)](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131)
+---
 
-## 🚀 Live Experience — v0.1 Foundation
+🚀 Live dApp — Operational Foundation
 
-**[OAPS Proof Builder & Registry](https://oaps-signer-dapp.vercel.app)**  
-Build, sign, and register immutable proofs on Sepolia today. This dApp powers the current Layer A foundation and serves as the entry point for future Credibility Atoms.
+**OAPS Proof Builder & Registry (v0.1)**  
+Build, sign, and register immutable proofs on the Sepolia testnet.
 
-## 📜 From Static Registry to Dynamic Protocol
+🔗 [Live dApp](https://oaps-signer-dapp.vercel.app)
 
-OAPS v0.1 delivered a neutral, on-chain registry for professional proofs (audits, attestations, task execution).  
+This system constitutes Layer A (v0.1) of the protocol and demonstrates the complete end-to-end pipeline:
 
-The **Credibility Atom Protocol** takes the next step: proofs become the opening move in an adversarial game.
+> Agent input → cryptographic commitment → on-chain settlement
 
-> **Credibility Atom**  
-> A cryptographically verifiable record of an agent's completed action or claim, executed under predefined constraints, exposed to bonded challenge for a fixed window, and finalized only after surviving adversarial scrutiny — producing a non-transferable, history-dependent **credibility delta**.
+The system is intentionally minimal, neutral, and judgment-free.
 
-This design makes lying economically irrational and turns silence (unchallenged proofs) into a powerful consensus signal.
+---
 
-## 🏗️ Three-Layer Architecture
+📜 Abstract — From Registry to Protocol
+
+OAPS v0.1 established a neutral, on-chain proof-of-existence registry for professional claims (audits, attestations, task execution).
+
+The **Credibility Atom Protocol** evolves this registry into a dynamic system where:
+
+> Proofs are not endpoints — they are the opening state of an adversarial game.
+
+---
+
+⚛️ The Credibility Atom
+
+A Credibility Atom is a cryptographically verifiable record of an agent’s completed action or claim that:
+
+- is submitted with economic stake,
+- is exposed to bonded challenge for a fixed window,
+- is finalized only after adversarial scrutiny,
+- produces a non-transferable, history-dependent credibility delta.
+
+**Design Outcomes**
+
+- Dishonesty becomes economically irrational
+- Silence (no challenge) becomes a meaningful signal
+- Trust is replaced by adversarial verification
+
+> Validity ≠ Quality  
+> Layer A never judges truth. It only settles incentives.
+
+---
+
+🏗️ Protocol Architecture — Three-Layer Stack
 
 ```mermaid
 graph TD
-    A[Layer A<br>Credibility Atom Factory<br>Neutral Settlement & Challenges] -->|Finalized Events| B
-    B[Layer B<br>Credibility Oracle<br>Delta Computation & Signals] -->|Tamper-proof Signals| E[Ecosystems<br>DeFi • DAOs • AI Agents]
-    C[Layer C<br>Shadow Operator Network<br>Watchtowers • APIs • Analytics] -.->|Monitors & Sustains| A
-    C -.->|Premium Services| E
+    subgraph LAYER_A [Layer A — Credibility Atom Factory]
+        A1[Atom Lifecycle & States]
+        A2[Bonded Challenge Mechanics]
+        A3[Neutral Economic Settlement]
+    end
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#ccf,stroke:#333,stroke-width:2px
-    style C fill:#9f9,stroke:#333,stroke-width:2px
+    subgraph LAYER_B [Layer B — Credibility Oracle]
+        B1[Delta Computation Engine]
+        B2[Explainable Scoring Framework]
+        B3[Oracle Interface Standard]
+    end
 
-Layer A — Immutable, judgment-free settlement. Registers atoms, enforces bonds, settles challenges economically.
-Status: ✅ v0.1 live (OAPSRegistryV0). Upgrading to v1 with full challenge mechanics.
+    subgraph LAYER_C [Layer C — Shadow Operator Network]
+        C1[Challenge Watchtowers]
+        C2[Enterprise APIs & Analytics]
+        C3[Sustainability & Security Services]
+    end
 
-Layer B — Intelligence layer. Consumes Layer A events to compute non-transferable deltas.
-Status: 🔄 RFC open (ACCREDITATION.md). Reference Oracle + open interface for competing implementations.
+    LAYER_A -- Finalized Events --> LAYER_B
+    LAYER_B -- Credibility Signals --> E[External Ecosystems]
+    LAYER_C -. Monitors .-> LAYER_A
+    LAYER_C -. Services .-> E
 
-Layer C — Sustainability engine. Premium services fund development without capturing governance.
-Status: 🔄 Formation & pilot phase.
+    style LAYER_A fill:#1a1a2e,stroke:#c792ea,stroke-width:2px,color:#ffffff
+    style LAYER_B fill:#0f1a3a,stroke:#82aaff,stroke-width:2px,color:#ffffff
+    style LAYER_C fill:#1a2e1a,stroke:#c3e88d,stroke-width:2px,color:#ffffff
+```
+
+---
+
+🧱 Layer Details
+
+🔒 **Layer A — Credibility Atom Factory (Settlement Layer)**
+
+**Function:** Immutable, judgment-free settlement layer where Credibility Atoms are minted, challenged, and economically resolved.
+
+**Properties:**
+- Explicit state machine: PENDING → FINALIZED / REJECTED
+- Bonded challenge windows
+- Deterministic economic outcomes
+
+**Status:**
+- ✅ v0.1 live: OAPSRegistryV0
+- 🔜 v1 upgrade: bonded challenges + dispute resolution
+
+**Core Principle:**  
+> Brutal neutrality. Layer A never evaluates truth or quality.
+
+---
+
+🧮 **Layer B — Credibility Oracle (Intelligence Layer)**
+
+**Function:** Consumes finalized Layer A events and computes credibility deltas.
+
+**Constraints:**
+- Non-transferable
+- History-dependent
+- Stake-weighted, game-resistant
+
+**Key Design Choice:**  
+Explainability over full transparency  
+(framework public, weightings sovereign)
+
+**Status:**  
+🔄 RFC active — ACCREDITATION.md  
+Reference oracle + open interface for competing models
+
+---
+
+🕶️ **Layer C — Shadow Operator Network (Sustainability Layer)**
+
+**Function:** Provides premium, non-privileged services that sustain protocol security and adoption.
+
+**Examples:**
+- Automated challenge watchtowers
+- High-throughput APIs & dashboards
+- Adversarial simulation and stress testing
+
+**Principle:**  
+> Service without capture. No special rights over protocol logic.
+
+---
 
 🔁 Credibility Atom Lifecycle
 
-
+```mermaid
 flowchart TD
-    A[Agent Performs Work<br>e.g. Audit / Task / Attestation] --> B[Build & Sign Atom<br>Structured JSON + Bond]
-    B --> C[Submit to Layer A<br>State: PENDING_CHALLENGE]
-    C --> D{Challenge Window Active?}
-    D -- No --> E[Window Closes → FINALIZED]
-    D -- Yes --> F[Challenger Observes & Decides]
-    F --> G{Challenge?}
-    G -- No --> D
-    G -- Yes --> H[Post Bond → Initiate Dispute]
-    H --> I[Resolution<br>e.g. ZK / Arbitration / Jurors]
-    I --> J{Outcome}
-    J -- Succeeds --> K[ECONOMICALLY_REJECTED<br>Submitter Bond Slashed]
-    J -- Fails --> L[FINALIZED<br>Challenger Bond Slashed]
-    E --> M[Layer B Oracle Computes Delta]
-    K --> M
-    L --> M
-    M --> N[Credibility Signal / Delta<br>History-Dependent & Non-Transferable]
-    N --> O[Consumed by Ecosystems<br>DeFi • DAOs • AI • Space Coordination]
+    P[Agent Performs Action] --> S[Submit Atom with Bond]
+    S --> C[PENDING_CHALLENGE]
+    C --> W{Challenge Window Active?}
 
+    W -- No --> F[FINALIZED]
+    W -- Yes --> O[Challenger Observes]
+    O --> D{Challenge?}
+
+    D -- No --> W
+    D -- Yes --> J[Post Bond]
+    J --> R[Dispute Resolution]
+    R --> X{Outcome}
+
+    X -- Success --> REJ[REJECTED]
+    X -- Fail --> FIN[FINALIZED]
+
+    FIN --> B[Compute Delta]
+    REJ --> N[Negative Delta]
+
+    B --> SIG[Credibility Signal]
+    N --> SIG
+```
+
+---
 
 🎯 Core Use Cases
 
-AI Agent Accountability — Verifiable execution trails for autonomous systems.
+- 🤖 AI Agent Accountability — verifiable execution histories
+- 🔐 Security & Code Audits — economic skin-in-the-game
+- 🏛️ DAO Governance — reputation from action, not tokens
+- 📜 RWA & Compliance — immutable attestations
+- 🚀 Jurisdiction-less Coordination — neutral trust primitive
 
-Adversarial Audits — Economic skin-in-the-game replaces blind trust in reviewers.
+---
 
-DAO & Governance Reputation — Action-based credibility, not token-weighted.
+📊 Current Implementation (v0.1)
 
-RWA / Compliance — Immutable attestations for real-world assets.
+| Component          | Details                                                                 |
+|--------------------|-------------------------------------------------------------------------|
+| Network            | Sepolia Testnet                                                         |
+| Registry Contract  | OAPSRegistryV0                                                          |
+| Contract Address   | 0x83e7593D3c8343437d92094d9485D6eDBfF89131                            |
+| Live dApp          | https://oaps-signer-dapp.vercel.app                                     |
+| Pilot Proofs       | Guard Check • State Machine                                             |
 
-Beyond Earth — Neutral trust primitive for jurisdiction-less environments (space, autonomous coordination).
-
-📊 Current Implementation — v0.1 Live on Sepolia
-
-Registry Contract — OAPSRegistryV0 at 0x83e7593D3c8343437d92094d9485D6eDBfF89131
-View on Etherscan • Read Contract • Write Contract
-
-Live dApp — Proof Builder — Build & register proofs today.
-
-Pilot Proofs
-Guard Check Pilot
-State Machine Pilot
+---
 
 🗺️ Roadmap to Indispensability
 
-Q1 2026 — Fortify the Atom
-Finalize CAS-001 • Deploy RegistryV1 with challenges • Game-theory bounty
+**Q1 2026 — Formalize & Fortify**  
+- Finalize CAS-001 specification  
+- Deploy OAPSRegistryV1 (bonded challenges)  
+- Public adversarial bug bounty  
 
-Q2 2026 — Activate Intelligence
-Launch Reference Oracle • Secure first hard-dependency integration
+**Q2 2026 — Activate Intelligence**  
+- Deploy Reference Credibility Oracle  
+- First hard-dependency ecosystem integration  
 
-2026+ — Standardization & Scale
-Engage standards bodies (W3C VC, etc.) • Grow Shadow Operator Network
+**2026+ — Standardization & Scale**  
+- Standards engagement (W3C VC, etc.)  
+- Expand Shadow Operator Network  
+- Civilizational-scale coordination use cases  
 
-📚 Documentation & Specs
+---
 
-CAS-001: Credibility Atom Specification — Draft normative standard (core technical reference)
+📚 Documentation
 
-ACCREDITATION.md — RFC for Layer B Credibility Oracle framework
+- CAS-001.md — Credibility Atom Specification (Draft)  
+- ACCREDITATION.md — Credibility Oracle RFC  
+- GETTING_STARTED.md — v0.1 usage guide  
+- MILESTONES.md — Public progress tracking  
 
-GETTING_STARTED.md — Practical guides for v0.1
+---
 
-MILESTONES.md — Public progress tracking
+🤝 Contributing
 
-🤝 Contribute & Connect
+OAPS is open infrastructure for serious builders.
 
-OAPS is open infrastructure — built for builders.
+- RFCs & issues → GitHub Issues  
+- Integration / pilots → DM @ultimateshield4  
+- Follow progress → Watch this repository  
 
-Issues, PRs, feedback → GitHub Issues
-
-Early pilot / integration interest → DM @ultimateshield4 on X
-
-Watch the repo for updates
+---
 
 📄 License & Disclaimer
 
-MIT License — see LICENSE.
+**License:** MIT License
 
-⚠️ Disclaimer
-OAPS provides cryptographic registration, economic settlement, and derived signals for claims. It is not a judge of truth, quality, correctness, safety, or outcome. Layer A remains brutally neutral — it settles bonds, never endorses content. All usage is at your own risk. Always perform independent due diligence.
+**Disclaimer:** OAPS provides cryptographic registration, adversarial challenge mechanisms, and derived credibility signals. It does not judge truth, correctness, safety, or outcomes. All usage is at your own risk.
 
-Core Principle: Validity ≠ Quality. Proof of Fact, Curated by Incentives.
+---
+
+**Core Principle (Non-Negotiable)**
+
+> Validity ≠ Quality  
+> Proof of Fact, Curated by Incentives.
+```
