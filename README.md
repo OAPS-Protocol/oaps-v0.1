@@ -1,304 +1,187 @@
-# 🧠 OAPS Protocol — The Credibility Atom Protocol
+# 🔐 OAPS Protocol (Open Audit Proof Standard) v0.1
 
-**A neutral, adversarial substrate for trust.**  
-**Proof of Fact, Curated by Incentives.**
-
-OAPS defines a foundational on-chain primitive — the **Credibility Atom** — enabling the generation of **non-transferable, history-dependent credibility signals** for any agent (human or artificial) through **economically bonded challenge games**.
-
-> **Validity ≠ Quality**  
-> OAPS never judges truth. It settles incentives.
-
----
+**The neutral, verifiable proof registry for professional work on-chain** (audits, attestations, task execution, documentation).  
+Immutable • Timestamped • Cryptographically Signed • Proof of Fact, Not Promise
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: v0.1 Live](https://img.shields.io/badge/Status-v0.1%20Foundation-brightgreen)](https://oaps-signer-dapp.vercel.app)
-[![Specification: CAS-001 Draft](https://img.shields.io/badge/Specification-CAS--001%20Draft-orange)](./SPECIFICATION.md)
+[![Status: v0.1 Live](https://img.shields.io/badge/Status-v0.1%20Live-brightgreen)](https://oaps-signer-dapp.vercel.app)
 [![Network: Sepolia](https://img.shields.io/badge/Network-Sepolia-purple)](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131)
 
----
+## 🚀 Live dApp – Build Your First Proof
 
-## 🚀 Live dApp — Operational Foundation
+**[OAPS Proof Builder & Registry](https://oaps-signer-dapp.vercel.app)**  
+Build, sign, and register immutable proofs of professional work on the Sepolia testnet.
 
-**OAPS Proof Builder & Registry (v0.1)**  
-Build, sign, and register immutable proofs on the Sepolia testnet.
+## 📋 Quick Start
 
-🔗 **Live dApp**  
-https://oaps-signer-dapp.vercel.app
+| **Role** | **Action** | **Link / Guide** |
+| :--- | :--- | :--- |
+| **Professionals** (Auditors, Analysts, Agents) | Build & Register a Proof | [Use Proof Builder](https://oaps-signer-dapp.vercel.app) |
+| **Projects & Investors** | Verify a Registered Proof | [Registry on Etherscan](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131) |
+| **Developers & Integrators** | Read Technical Specification | [View Rendered Specification](https://github.com/OAPS-Protocol/oaps-v0.1/blob/main/SPECIFICATION.md) |
+| **Everyone** | Step-by-Step Guides | [GETTING_STARTED.md](GETTING_STARTED.md) |
+| **Progress** | Milestone Tracking | [MILESTONES.md](MILESTONES.md) |
 
-This system constitutes **Layer A (v0.1)** of the protocol and demonstrates the complete end-to-end pipeline:
+## 🎯 Core Principle: Validity ≠ Quality
 
-Agent input → cryptographic commitment → wallet signature → on-chain economic settlement
+OAPS is a **neutral registry**. It verifies the **existence, integrity, and source** of a proof—not the quality or outcome of the work it represents. The protocol does not curate, approve, reject, or rate any proofs; it only enforces cryptographic and schema validity.
 
-The system is intentionally **minimal**, **neutral**, and **judgment-free**.
+| **Validity (What OAPS Verifies)** | **Quality (What OAPS Does NOT Verify)** |
+| :--- | :--- |
+| ✅ Proof existence at a specific time | ❌ Correctness of findings or decisions |
+| ✅ Data integrity (hash is unaltered) | ❌ Skill or competence of the attester |
+| ✅ Cryptographic signature of the source | ❌ Safety or security of a system |
+| ✅ Immutable, on-chain timestamp | ❌ Future performance or results |
 
-This is not a mock-up.  
-It is a working settlement layer.
+## 🎪 Core Use Cases
 
----
+OAPS provides foundational infrastructure for verifying professional work across the on-chain economy, starting with audits and extending to new verticals.
 
-## 📜 Abstract — From Registry to Protocol
+1.  **🔐 Audit & Security Proofs**: The foundational use case. Create immutable, timestamped records for code audits, penetration tests, and security reviews.
+2.  **📚 Educational & Reference Proofs**: Document the verification of canonical design patterns, reference implementations, or best practice examples.
+3.  **🏢 RWA & Compliance Attestations**: Tokenization projects can register immutable proofs for off-chain legal reviews, valuation reports, and regulatory compliance checks.
+4.  **🤖 AI Agent Accountability**: Autonomous agents can register verifiable proofs of claimed task execution (existence and source only — not decision correctness), creating an immutable decision and action trail for accountability.
 
-OAPS v0.1 established a neutral, on-chain **proof-of-existence registry** for professional claims such as audits, attestations, and task execution.
+## 🏗️ Current Implementation – Live & Operational
 
-The **Credibility Atom Protocol** evolves this registry into a **dynamic adversarial system** where:
+| **Component** | **Status** | **Details / Link** |
+| :--- | :--- | :--- |
+| **Protocol Specification** | ✅ Complete | [View Rendered on GitHub](https://github.com/OAPS-Protocol/oaps-v0.1/blob/main/SPECIFICATION.md) |
+| **Registry Smart Contract** | ✅ Verified | [Sepolia Etherscan](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131) |
+| **Proof Builder dApp** | ✅ Fully Functional | [Live dApp](https://oaps-signer-dapp.vercel.app) (source: `tools/`) |
+| **Documentation Suite** | ✅ Complete | Guides, Milestones, and Full Specification |
+| **Pilot Proofs** | ✅ Registered | [Guard Check Proof](https://sepolia.etherscan.io/tx/0x87045637eea366f13dd2e2df9dc29032f74583999ceb8d38fd129b6f6b05d6c4) • [State Machine Proof](https://sepolia.etherscan.io/tx/0xee9e28b54ceeb871e1279a5dcccf99ca540af0b3b16571ecc17c619c28b01f07) |
 
-> **Proofs are not endpoints — they are the opening state of an economic game.**
+## End-to-End Workflow
 
-Silence becomes meaningful.  
-Dishonesty becomes expensive.  
-Trust is replaced by adversarial verification.
+This diagram maps the complete path for creating and verifying an OAPS proof. It involves off-chain actions, on-chain operations, and public verification.
 
----
+┌─────────────────────┐
+                      │  Auditor / Project  │
+                      │   (e.g., OAPS dApp) │
+                      └──────────┬──────────┘
+                                 │
+[Off-Chain]                     │ 1. Generate Audit Report
+                                 │
+                ┌────────────────▼────────────────┐
+                │  2. Build Canonical OAPS Proof  │
+                │  (Structured JSON per spec)     │
+                └────────────────┬────────────────┘
+                                 │
+                ┌────────────────▼────────────────┐
+                │   3. Generate Proof Hash        │
+                │   (keccak256 of JSON)           │
+                └────────────────┬────────────────┘
+                                 │
+                ┌────────────────▼────────────────┐
+                │      4. Sign Hash               │
+                │ (with Auditor's Private Key)    │
+                └────────────────┬────────────────┘
+                                 │
+[On-Chain]                       │
+                ┌────────────────▼────────────────┐
+                │  5. Register on OAPS Registry   │
+                │     (Smart Contract Call)       │
+                │ ┌────────────────────────────┐ │
+                │ │ OAPSRegistryV0             │ │
+                │ │ - Stores Proof Hash        │ │
+                │ │ - Stores Signature         │ │
+                │ │ - Timestamps (block time)  │ │
+                │ │ - Emits Event              │ │
+                │ └────────────────────────────┘ │
+                └────────────────┬────────────────┘
+                                 │
+                                 ▼
+    ┌─────────────────────────────────────────────┐
+    │            Ethereum Sepolia Testnet         │
+    │  (Immutable, Public, Verifiable Ledger)     │
+    └────────────────┬────────────────────────────┘
+                     │
+[Verification]       │
+    ┌───────────────▼────────────────┐
+    │         Public / Investors /    │
+    │   Projects / DAOs / Analysts    │
+    └───────────────┬────────────────┘
+                    │
+Two Verification Paths:
+┌─────────────────────────────────────────┐
+│                                         │
+│ A. On-Chain Lookup:                     │
+│    Query the OAPSRegistryV0 contract    │
+│    with a Proof Hash to confirm its     │
+│    registration timestamp and auditor.  │
+│                                         │
+│ B. Cryptographic Proof:                 │
+│    1. Recreate the Proof Hash from the  │
+│       original JSON document.           │
+│    2. Use the signature to recover the  │
+│       signer's public address.          │
+│    3. Match against on-chain record.    │
+└─────────────────────────────────────────┘
 
-## ⚛️ The Credibility Atom
+## 🧪 Deployment
 
-A **Credibility Atom** is a cryptographically verifiable record of an agent’s completed action or claim that:
+**Sepolia Testnet (v0.1)** — Official pilot registry.
 
-- is submitted with an **economic bond**
-- is exposed to **bonded challenge** for a fixed window
-- is finalized only after **adversarial scrutiny**
-- produces a **non-transferable, history-dependent credibility delta**
+**Contract:** `OAPSRegistryV0`  
+**Address:** `0x83e7593D3c8343437d92094d9485D6eDBfF89131`  
+**Network:** Sepolia Testnet  
+**Status:** VERIFIED & ACTIVE
 
-### Design Outcomes
+🔗 [View on Etherscan](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131) • [Read Contract](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131#readContract) • [Write Contract](https://sepolia.etherscan.io/address/0x83e7593D3c8343437d92094d9485D6eDBfF89131#writeContract)
 
-- Dishonesty becomes economically irrational  
-- Absence of challenge becomes a signal  
-- Trust is replaced by incentive-aligned verification  
+## 🗺️ Protocol Roadmap & Architecture
 
-> **Validity ≠ Quality**  
-> Layer A never judges truth. It only settles incentives.
+OAPS is being developed as a sustainable, three-layer public good.
 
----
+**Layer A: Universal Proof Registry (The Protocol)**
+*   The free, open-source, and neutral base layer.
+*   Provides an immutable record of proof hashes, signatures, and timestamps.
+*   **Status:** ✅ v0.1 Live on Sepolia.
 
-## 🏗️ Protocol Architecture — Three-Layer Stack
+**Layer B: Credibility Oracle (Derived Reputation)**
+*   An opt-in, transparent layer that reads from Layer A to compute track records and attestation histories.
+*   Provides data-driven insights, not qualitative ratings or guarantees.
+*   **Status:** 🔄 Research & Design (Q1 2026)
+*   **Public RFC draft now open**: [ACCREDITATION.md](./ACCREDITATION.md) – feedback welcome!
 
-``mermaid
-graph TD
-    subgraph LAYER_A[Layer A — Credibility Atom Factory]
-        A1[Atom Lifecycle & States]
-        A2[Bonded Challenge Mechanics]
-        A3[Neutral Economic Settlement]
-    end
+**Layer C: Shadow Operator & Services (Sustainable Engine)**
+*   Premium services built atop the protocol: dashboards, enterprise APIs, monitoring, and compliance tooling.
+*   Funds ongoing protocol development and growth.
+*   **Status:** 🔄 Formation & Pilot (Q1 2026)
 
-    subgraph LAYER_B[Layer B — Credibility Oracle]
-        B1[Credibility Delta Engine]
-        B2[Explainable Scoring Framework]
-        B3[Oracle Interface Standard]
-    end
+## 🔍 Specification Preview
 
-    subgraph LAYER_C[Layer C — Shadow Operator Network]
-        C1[Challenge Watchtowers]
-        C2[Enterprise APIs & Analytics]
-        C3[Sustainability & Security Services]
-    end
+The full technical specification is available in **rendered format** (recommended):
 
-    LAYER_A -- Finalized Events --> LAYER_B
-    LAYER_B -- Credibility Signals --> ECOSYSTEM[External Ecosystems]
-    LAYER_C -. Monitors .-> LAYER_A
-    LAYER_C -. Services .-> ECOSYSTEM
+- **[Open Rendered Preview on GitHub](https://github.com/OAPS-Protocol/oaps-v0.1/blob/main/SPECIFICATION.md)**  
+  (GitHub's native rendering with full formatting)
 
-    style LAYER_A fill:#1a1a2e,stroke:#c792ea,stroke-width:2px,color:#ffffff
-    style LAYER_B fill:#0f1a3a,stroke:#82aaff,stroke-width:2px,color:#ffffff
-    style LAYER_C fill:#1a2e1a,stroke:#c3e88d,stroke-width:2px,color:#ffffff
+- **Best Interactive Experience**: [Open in Live dApp](https://oaps-signer-dapp.vercel.app)  
+  (In the footer, click **"View Preview"** for a formatted modal view)
 
-## 🧱 Layer Details
- 
-### 🔒 Layer A — Credibility Atom Factory (Settlement Layer)
- 
-**Function** Immutable, judgment-free settlement layer where Credibility Atoms are minted, challenged, and economically resolved.
- 
-**Properties**
- 
- 
-- Explicit state machine `PENDING → CHALLENGED → FINALIZED / ECONOMICALLY_REJECTED`
- 
-- Bonded challenge windows
- 
-- Deterministic, non-governed outcomes
- 
+- **Plain Text Alternative**: [Raw Specification](https://raw.githubusercontent.com/OAPS-Protocol/oaps-v0.1/main/SPECIFICATION.md)
 
- 
-**Status**
- 
- 
-- ✅ v0.1 live — `OAPSRegistryV0`
- 
-- 🔜 v1 production — `CredibilityAtomRegistryV1`
- 
+## ❓ Troubleshooting
 
- 
-**Core Principle** **Brutal neutrality.** Layer A never evaluates truth or quality — only who pays.
-  
-### 🧮 Layer B — Credibility Oracle (Intelligence Layer)
- 
-**Function** Consumes finalized Layer A events and computes **credibility deltas**.
- 
-**Constraints**
- 
- 
-- Non-transferable
- 
-- History-dependent
- 
-- Stake-weighted
- 
-- Game-resistant
- 
+| **Issue** | **Solution** |
+| :--- | :--- |
+| MetaMask not detected | Install/Enable the MetaMask browser extension |
+| Wrong network | Switch your wallet to the **Sepolia Testnet** |
+| Invalid hash format | Ensure the hash is 66 characters (e.g., `0x` + 64 hex chars) |
+| Transaction failed | Check your Sepolia ETH balance for gas fees |
+| Proof not found | Verify the hash computation matches the OAPS specification |
 
- 
-**Key Design Choice** Explainability over full transparency. Frameworks are public. Weightings are sovereign.
- 
-**Status**
- 
- 
-- 🔄 RFC active — `ACCREDITATION.md`
- 
-- Open interface for competing oracle models
- 
+**Get Test ETH** → [Sepolia Faucet](https://sepoliafaucet.com/)
 
-  
-### 🕶️ Layer C — Shadow Operator Network (Sustainability Layer)
- 
-**Function** Provides premium, non-privileged services that sustain protocol security and adoption.
- 
-**Examples**
- 
- 
-- Automated challenge watchtowers
- 
-- High-throughput APIs & dashboards
- 
-- Adversarial simulation and stress testing
- 
+## 🤝 Contribute
 
- 
-**Principle** Service without capture. No special rights over protocol logic.
-  
-## 🔁 Credibility Atom Lifecycle
- `flowchart TD     P[Agent Performs Action]     S[Submit Atom with Bond]     C[PENDING]     W{Challenge Window Active?}     O[Challenger Observes]     D{Challenge?}     J[Post Matching Bond]     R[Dispute Resolution]     X{Outcome}     FIN[FINALIZED]     REJ[ECONOMICALLY REJECTED]     B[Compute Credibility Delta]     SIG[Credibility Signal]      P --> S --> C --> W     W -- No --> FIN     W -- Yes --> O --> D     D -- No --> W     D -- Yes --> J --> R --> X     X -- Submitter Wins --> FIN     X -- Challenger Wins --> REJ     FIN --> B --> SIG     REJ --> B --> SIG `  
-## 🎯 Core Use Cases
- 
- 
-- 🤖 **AI Agent Accountability** — Verifiable execution histories for autonomous agents
- 
-- 🔐 **Security & Code Audits** — Economic skin-in-the-game replaces blind trust
- 
-- 🏛️ **DAO Governance** — Reputation derived from action, not token wealth
- 
-- 📜 **RWA & Compliance** — Immutable attestations for real-world assets
- 
-- 🚀 **Jurisdiction-less Coordination** — Neutral trust primitive for autonomous systems
- 
+Feedback, contributions, or pilot interest? Open an [issue](https://github.com/OAPS-Protocol/oaps-v0.1/issues) or PR. Early auditors/professionals: DM [@ultimateshield4](https://x.com/ultimateshield4) on X for onboarding support.
 
-  
-## 📊 Current Implementation (v0.1)
- 
-  
- 
-Component
- 
-Details
- 
-   
- 
-Network
- 
-Sepolia Testnet
- 
- 
- 
-Registry
- 
-OAPSRegistryV0
- 
- 
- 
-Contract
- 
-`0x83e7593D3c8343437d92094d9485D6eDBfF89131`
- 
- 
- 
-Live dApp
- 
-[https://oaps-signer-dapp.vercel.app](https://oaps-signer-dapp.vercel.app)
- 
- 
- 
-Features
- 
-Proof builder · Signature flow · On-chain registry
- 
-  
-  
-## 🗺️ Roadmap to Indispensability
- 
-### Q1 2026 — Formalize & Fortify
- 
- 
-- Finalize `CAS-001`
- 
-- Deploy `CredibilityAtomRegistryV1`
- 
-- Launch public adversarial bug bounty
- 
+## 📄 License
 
- 
-### Q2 2026 — Activate Intelligence
- 
- 
-- Deploy reference Credibility Oracle
- 
-- First hard-dependency ecosystem integration
- 
+MIT License — see [LICENSE](LICENSE) for details.
 
- 
-### 2026+ — Standardization & Scale
- 
- 
-- Standards engagement (W3C Verifiable Credentials, etc.)
- 
-- Expand Shadow Operator Network
- 
-- Civilizational-scale coordination primitives
- 
+⚠️ **Disclaimer:** OAPS provides proof *verification* only. It records facts about the existence, integrity, and authorship of professional work. It does **not** judge, guarantee, or endorse the quality, safety, correctness, compliance, or outcome of that work. Always conduct independent due diligence.
 
-  
-## 📚 Documentation
- 
- 
-- `CAS-001.md` — Credibility Atom Specification (Draft)
- 
-- `ACCREDITATION.md` — Credibility Oracle RFC
- 
-- `GETTING_STARTED.md` — Developer onboarding
- 
-- `MILESTONES.md` — Public progress tracking
- 
-
-  
-## 🤝 Contributing
- 
-OAPS is **open infrastructure for serious builders**.
- 
- 
-- RFCs & issues → GitHub Issues
- 
-- Integrations / pilots → DM **@ultimateshield4**
- 
-- Follow progress → Watch this repository
- 
-
-  
-## 📄 License & Disclaimer
- 
-**License** MIT License — see `LICENSE`
- 
-**Disclaimer** OAPS provides cryptographic registration, adversarial challenge mechanisms, and derived credibility signals. It does **not** judge truth, correctness, safety, legality, or outcomes.
- 
-All usage is at your own risk. Always conduct independent due diligence.
-  
-## 🎯 Core Principle (Non-Negotiable)
- 
-**Validity ≠ Quality** **Proof of Fact, Curated by Incentives.**
- 
+**Core Principle Maintained: Validity ≠ Quality. Proof of Fact, Not Promise.**
