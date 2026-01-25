@@ -1,255 +1,215 @@
+# Open Audit Proof Standard - Version 0.1
 
-# Credibility Atom Specification (CAS-001)
+## 1. Preamble: A Protocol for Truth
 
-**Status:** DRAFT  
-**Protocol:** OAPS – Open Audit Proof System  
-**Last Updated:** 2026-01-25  
-**License:** CC BY-SA 4.0  
+This document defines the Open Audit Proof Standard (OAPS) v0.1. Its purpose is to establish a canonical, cryptographically-verifiable record of an audit's existence and content, independent of any judgment of quality.
 
----
+An OAPS Proof is a **proof of fact, not a promise of safety**. It answers three questions:
 
-## 1. Abstract
+1. **Existence**: Did this audit exist at a specific time?
+2. **Integrity**: Has the audit record been altered?
+3. **Source**: Which auditor cryptographically attested to it?
 
-This specification defines the **Credibility Atom**, the foundational primitive of the OAPS Protocol.
+## 2. Core Tenet: The Validity-Quality Distinction
 
-A Credibility Atom is a cryptographically verifiable claim, submitted with economic stake, exposed to bonded challenge, and resolved through adversarial scrutiny to produce a **non-transferable, history-dependent credibility signal**.
+**Validity ≠ Quality**
 
----
+A **valid** OAPS proof guarantees the data's integrity and origin. It does **not** guarantee the audit's correctness, thoroughness, or the security of the audited system. This distinction is fundamental to the protocol's neutrality and defensibility.
 
-## 2. Introduction
+## 3. The Proof Schema: A Deterministic Blueprint
 
-### 2.1 Problem Statement
+### 3.1 Required Data Structure
 
-Current verification systems rely on trusted authorities or static proofs. There exists no neutral, economically-secured primitive that transforms assertions into trust through adversarial games.
-
-### 2.2 Goals
-
-1. Economically secured verifiable actions  
-2. Neutral dispute settlement without qualitative judgment  
-3. Non-transferable, history-dependent credibility  
-4. Adversarial truth discovery  
-
-### 2.3 Non-Goals
-
-- Determining absolute truth  
-- Replacing legal systems  
-- Tradable reputation  
-
----
-
-## 3. Definitions
-
-| Term                     | Definition                                                                 |
-|--------------------------|----------------------------------------------------------------------------|
-| Agent                    | Entity identified by a cryptographic key                                   |
-| Credibility Atom         | Atomic unit defined by this spec                                           |
-| Base Proof               | Structured claim (OAPS v0.1 format)                                        |
-| Bond                     | Economic stake (ETH or ERC-20)                                             |
-| Challenge Window         | Period for dispute                                                         |
-| Credibility Delta        | Non-transferable signal produced by Layer B                                |
-| Slashing                 | Economic penalty on bond                                                   |
-
----
-
-## 4. Credibility Atom Structure
-
-### 4.1 Base Proof Extension
-
-```json
-{
-  "version": "CAS-001",
-  "baseProof": {
-    // OAPS v0.1 proof object
-  },
-  "economicMetadata": {
-    "submissionBond": "string",           // wei as string
-    "challengeWindowSeconds": "integer",
-    "disputeResolverId": "string"
-  }
-}
-```
-
-### 4.2 Economic Metadata Schema
+The proof is a JSON object. The following schema is the single source of truth for canonicalization.
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Credibility Atom Economic Metadata",
+  "title": "OAPS Proof v0.1",
   "type": "object",
   "required": [
-    "baseProofHash",
-    "agentAddress",
-    "submissionBond",
-    "challengeWindowSeconds",
-    "disputeResolverId"
+    "oapsVersion",
+    "auditId",
+    "project",
+    "auditor",
+    "auditScope",
+    "reportHash",
+    "timestamp"
   ],
   "properties": {
-    "baseProofHash": {
+    "oapsVersion": {
       "type": "string",
-      "pattern": "^0x[a-fA-F0-9]{64}$"
+      "const": "0.1.0",
+      "description": "The immutable OAPS specification version used."
     },
-    "agentAddress": {
+    "auditId": {
       "type": "string",
-      "pattern": "^0x[a-fA-F0-9]{40}$"
+      "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+      "description": "A unique, version 4 UUID for this audit engagement."
     },
-    "submissionBond": {
+    "project": {
+      "type": "object",
+      "required": ["name", "address", "blockchain"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The canonical name of the project."
+        },
+        "address": {
+          "type": "string",
+          "description": "The primary contract address (0x...) or project identifier."
+        },
+        "blockchain": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "example": "ethereum",
+          "description": "Lowercase blockchain identifier (e.g., 'ethereum', 'arbitrum-one')."
+        }
+      }
+    },
+    "auditor": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The auditor's cryptographic identity (e.g., 0x... Ethereum address). This is the signing key. It is the only identity that matters on-chain."
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional human-readable label. Not used in hashing or signature verification."
+        }
+      }
+    },
+    "auditScope": {
+      "type": "object",
+      "required": ["commitHash"],
+      "properties": {
+        "commitHash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$",
+          "description": "The full SHA-1 Git commit hash of the audited codebase."
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "hash"],
+            "properties": {
+              "path": { "type": "string" },
+              "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+            }
+          },
+          "description": "Optional array of specific file paths and their SHA-256 hashes for granular verification."
+        }
+      }
+    },
+    "reportHash": {
       "type": "string",
-      "pattern": "^[0-9]+$"
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "The SHA-256 hash of the final, publicly accessible audit report (e.g., PDF). This immutably links the proof to the human-readable document."
     },
-    "challengeWindowSeconds": {
-      "type": "integer",
-      "minimum": 3600,
-      "maximum": 604800
-    },
-    "disputeResolverId": {
-      "type": "string"
-    },
-    "contextUri": {
+    "timestamp": {
       "type": "string",
-      "format": "uri"
+      "format": "date-time",
+      "description": "ISO 8601 UTC timestamp (e.g., '2025-01-01T12:00:00Z') of proof generation."
+    },
+    "findingsSummary": {
+      "type": "object",
+      "properties": {
+        "critical": { "type": "integer", "minimum": 0, "default": 0 },
+        "high": { "type": "integer", "minimum": 0, "default": 0 },
+        "medium": { "type": "integer", "minimum": 0, "default": 0 },
+        "low": { "type": "integer", "minimum": 0, "default": 0 },
+        "informational": { "type": "integer", "minimum": 0, "default": 0 }
+      },
+      "description": "OPTIONAL. Summary counts. Included for indexing only. Does NOT imply completeness or accuracy and is NOT a trust signal."
     }
   }
 }
 ```
 
-### 4.3 Atom Commitment Hash
+## 4. The Canon: Rules for Deterministic Hashing
 
-```solidity
-atomHash = keccak256(
-  abi.encodePacked(
-    baseProofHash,
-    agentAddress,
-    submissionBond,
-    challengeWindowSeconds,
-    disputeResolverId
-  )
-)
-```
+To ensure global consensus on a proof's cryptographic fingerprint, the JSON object **MUST** be serialized into an identical string by all parties. The rules are absolute:
 
----
+1. Encoding: UTF-8.
+2. Key Ordering: All object members (including nested objects) are ordered lexicographically by their Unicode code points.
+3. Whitespace: No spaces, line breaks, or indentation outside of string values.
+4. Numerals: Integers are serialized without leading zeros, decimal points, or exponent notation. Floating-point numbers are prohibited in required fields.
+5. Strings: Escaped according to JSON standards (e.g., `\"`, `\\`, `\n`).
 
-## 5. Lifecycle & State Machine
+**Example Pseudocode:**
 
-### 5.1 States
-
-| State                  | Description                                      |
-|------------------------|--------------------------------------------------|
-| PENDING                | Atom submitted, bond locked                      |
-| CHALLENGED             | Active bonded dispute                            |
-| FINALIZED              | Accepted, bond returned                          |
-| ECONOMICALLY_REJECTED  | Invalidated, bond slashed                        |
-
-### 5.2 State Diagram
-
-```mermaid
-flowchart LR
-    P[PENDING] -->|No Challenge| F[FINALIZED]
-    P -->|Challenge| C[CHALLENGED]
-    C -->|Submitter Wins| F
-    C -->|Challenger Wins| R[ECONOMICALLY_REJECTED]
-```
-
----
-
-## 6. Bonded Challenge Mechanics
-
-### 6.1 Submission
-
-1. Prepare Base Proof  
-2. Compute atomHash  
-3. Sign hash with agent key  
-4. Submit Atom with bond to Layer A  
-
-### 6.2 Challenge
-
-- Any actor may challenge during window  
-- Challenger posts matching bond  
-- Atom enters CHALLENGED state  
-
-### 6.3 Dispute Resolution (Default)
-
-- Random bonded jurors  
-- Commit-reveal voting  
-- ≥ ⅔ supermajority decides outcome  
-
-### 6.4 Economic Settlement
-
-| Outcome              | Submitter Bond | Challenger Bond |
-|----------------------|----------------|-----------------|
-| No Challenge         | Returned       | —               |
-| Challenge Fails      | Returned       | Slashed         |
-| Challenge Succeeds   | Slashed        | Returned        |
-
----
-
-## 7. Economic Invariants
-
-7.1 Attack Cost > Expected Fraud Profit  
-7.2 Expected Honest Challenge Reward > Challenge Cost  
-7.3 Parameter Bounds  
-- Minimum bond ≥ 1 ETH  
-- Bond ratio = 1:1  
-- Window: 24h – 7d  
-
----
-
-## 8. Security Model
-
-| Threat     | Mitigation                     |
-|------------|--------------------------------|
-| Sybil      | High bonding requirement       |
-| Long con   | Time decay & history weighting |
-| Spam       | Bond slashing                  |
-| Collusion  | Random juror selection         |
-| Data loss  | Decentralized storage (IPFS)   |
-
----
-
-## 9. Credibility Delta Framework
-
-### 9.1 Oracle Interface
-
-```solidity
-interface ICredibilityOracle {
-  function computeDelta(
-    address agent,
-    bytes32[] calldata finalizedAtoms,
-    bytes32[] calldata rejectedAtoms
-  ) external view returns (int256 delta);
+```javascript
+function canonicalize(proofObject) {
+    return JSON.stringify(proofObject, Object.keys(proofObject).sort(), '');
 }
 ```
 
-### 9.2 Principles
+## 5. Cryptographic Identity & On-Chain Record
 
-- Non-transferable  
-- History-dependent  
-- Stake-weighted  
-- Time-decaying  
+### 5.1 The Proof Hash
 
----
+The unique identifier of an audit proof is defined as:
 
-## 10. Implementation Guidelines
-
-- Enforce lifecycle & slashing in Layer A  
-- Store full proofs on IPFS/Arweave  
-- Emit rich metadata events  
-- Wrap existing v0.1 proofs as base layer  
-
----
-
-## 11. Governance & Versioning
-
-- Activated at mainnet deployment  
-- Changes via CAIP (Credibility Atom Improvement Proposal)  
-- Backward compatibility required  
-
----
-
-## 12. References
-
-1. OAPS v0.1 Registry Specification  
-2. EIP-712 Structured Data Signing  
-3. Kleros Dispute Resolution  
-4. Augur Prediction Market Mechanics  
 ```
+proofHash = keccak256(utf8.encode(canonicalizedProofJsonString))
+```
+
+### 5.2 The On-Chain Tuple
+
+The OAPS Registry stores the minimum data required for verification:
+
+```solidity
+struct ProofRecord {
+    bytes32 proofHash;
+    address auditor;      // The `auditor.id` as an Ethereum address
+    address submitter;
+    uint256 timestamp;    // Block timestamp of registration
+}
+```
+
+### 5.3 Workflow
+
+1. **Generate**: The auditor creates the JSON object, canonicalizes it, and computes the `proofHash`.
+2. **Sign**: The auditor signs the `proofHash` with the private key corresponding to `auditor.id`.
+3. **Register**: The `proofHash` and signature are submitted to the OAPS Registry. The registry verifies the signature matches `auditor.id` and records the hash.
+
+## 6. Independent Verification Protocol
+
+Any third party can verify a claim without trusting the OAPS organization:
+
+1. **Acquire Data**: Obtain the original audit report and public metadata (project name, commit hash, etc.).
+2. **Reconstruct**: Build the proof JSON from primary sources.
+3. **Recompute**: Canonicalize and hash the JSON to produce `calculatedHash`.
+4. **Query**: Call `registrationTime(calculatedHash)` on the OAPS Registry.
+5. **Verify**: Confirm the registry returns a valid `ProofRecord` where `record.auditor` matches the claimed public key.
+6. **(Optional) Validate**: Check that the `reportHash` matches the downloaded report, and the `commitHash` exists in the project's public repository.
+
+## 7. Security Considerations & Attack Mitigations
+
+- **Replay Attacks**: The `auditId` (UUID) ensures the same proof cannot be registered twice. The registry's mapping from `proofHash` to record is unique.
+- **Misrepresentation**: Auditors are responsible for the accuracy of the data in the JSON. The `findingsSummary` is optional and informational only to prevent it from being used as a trust metric.
+- **Signature Malleability**: The registry must use a signature verification method that is not susceptible to malleability (e.g., ECDSA with proper recovery).
+- **Data Availability**: The audit report (`reportHash` source) and code (`commitHash`) must remain publicly accessible for verification. OAPS does not guarantee data availability.
+
+## 8. Versioning & Governance
+
+This is specification **v0.1.0**.
+
+- **Patch Versions (0.1.x)**: Backward-compatible clarifications or bug fixes.
+- **Minor Versions (0.x.0)**: Backward-compatible additions (e.g., new optional fields).
+- **Major Versions (x.0.0)**: Breaking changes that require a new registry and migration.
+
+Amendments to this specification will follow the **OAPS Improvement Proposal (OIP)** process, governed by the protocol's Charter to ensure neutrality and anti-capture.
+
+---
+
+### Footnotes
+
+1. All hashes are represented as lowercase hexadecimal strings **without** the `0x` prefix in the JSON schema. The `keccak256` function expects a raw byte array.
+2. The blockchain identifier should follow the Chainlist naming convention where applicable.
+3. This document is the protocol. Implementations **must** adhere to it exactly to achieve interoperability.
+
 
