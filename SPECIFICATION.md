@@ -1,4 +1,4 @@
-```markdown
+
 # Credibility Atom Specification (CAS-001)
 
 **Status:** DRAFT  
@@ -252,3 +252,4 @@ interface ICredibilityOracle {
 3. Kleros Dispute Resolution  
 4. Augur Prediction Market Mechanics  
 ```
+
