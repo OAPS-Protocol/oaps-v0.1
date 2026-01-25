@@ -1,16 +1,16 @@
 
-
 # Credibility Atom Specification (CAS-001)
+
 **Status:** DRAFT  
 **Protocol:** OAPS – Open Audit Proof System  
-**License:** CC BY-SA 4.0  
 **Last Updated:** 2026-01-25  
+**License:** CC BY-SA 4.0  
 
 ---
 
 ## 1. Abstract
 
-This specification defines the **Credibility Atom** — the foundational primitive of the OAPS Protocol.
+This specification defines the **Credibility Atom**, the foundational primitive of the OAPS Protocol.
 
 A Credibility Atom is a cryptographically verifiable claim, submitted with economic stake, exposed to bonded challenge, and resolved through adversarial scrutiny to produce a **non-transferable, history-dependent credibility signal**.
 
@@ -20,44 +20,40 @@ A Credibility Atom is a cryptographically verifiable claim, submitted with econo
 
 ### 2.1 Problem Statement
 
-Current verification systems rely on trusted authorities or static proofs. There exists no neutral, economically-secured primitive that transforms assertions into trust through adversarial games, producing signals resistant to Sybil attacks and long-con strategies.
+Current verification systems rely on trusted authorities or static proofs. There exists no neutral, economically-secured primitive that transforms assertions into trust through adversarial games.
 
 ### 2.2 Goals
 
-1. Define an atomic unit of verifiable action that is economically secured  
-2. Create a neutral settlement layer resolving challenges without qualitative judgment  
-3. Generate non-transferable, history-dependent credibility signals  
-4. Enable adversarial truth discovery across AI, security, and governance systems  
+1. Economically secured verifiable actions  
+2. Neutral dispute settlement without qualitative judgment  
+3. Non-transferable, history-dependent credibility  
+4. Adversarial truth discovery  
 
 ### 2.3 Non-Goals
 
-- Determining absolute “truth”
-- Replacing legal or regulatory systems
-- Guaranteeing safety or performance
-- Creating a tradable reputation asset  
+- Determining absolute truth  
+- Replacing legal systems  
+- Tradable reputation  
 
 ---
 
 ## 3. Definitions
 
 | Term | Definition |
-|---|---|
-| Agent | An entity (human or artificial) identified by a cryptographic public key |
-| Credibility Atom | The complete atomic unit defined in this specification |
-| Base Proof | Structured JSON claim following OAPS v0.1 schema |
-| Bond | Economic stake required for submission or challenge |
-| Challenge Window | Fixed period during which an Atom may be disputed |
-| Credibility Delta | Non-transferable signal derived from Atom history |
-| Finalization | Resolution into FINALIZED or ECONOMICALLY_REJECTED |
-| Slashing | Economic penalty applied to failed submissions or challenges |
+|----|----|
+| Agent | Entity identified by a cryptographic key |
+| Credibility Atom | Atomic unit defined by this spec |
+| Base Proof | Structured claim (OAPS v0.1) |
+| Bond | Economic stake |
+| Challenge Window | Period for dispute |
+| Credibility Delta | Non-transferable signal |
+| Slashing | Economic penalty |
 
 ---
 
 ## 4. Credibility Atom Structure
 
-A Credibility Atom consists of **Base Proof data** and **Economic Metadata**.
-
-### 4.1 Base Proof Schema Extension
+### 4.1 Base Proof Extension
 
 ```json
 {
@@ -136,6 +132,9 @@ FINALIZED	Accepted, bond returned
 ECONOMICALLY_REJECTED	Invalidated, bond slashed
 
 
+
+---
+
 5.2 State Diagram
 
 flowchart LR
@@ -151,36 +150,39 @@ flowchart LR
 
 6.1 Submission
 
-1. Agent prepares Base Proof
+1. Prepare Base Proof
 
 
-2. Computes atomHash
+2. Compute atomHash
 
 
-3. Signs hash with agent key
+3. Sign hash
 
 
-4. Submits Atom with bond to Layer A
+4. Submit Atom with bond
 
 
 
 6.2 Challenge
 
-Any actor may challenge during window
+Any actor may challenge
 
 Challenger posts matching bond
 
-Atom enters CHALLENGED state
+Atom enters CHALLENGED
 
 
-6.3 Dispute Resolution (Default)
+6.3 Dispute Resolution
 
 Random bonded jurors
 
 Commit–reveal voting
 
-≥ ⅔ supermajority decides outcome
+≥ ⅔ supermajority
 
+
+
+---
 
 6.4 Economic Settlement
 
@@ -196,7 +198,7 @@ Challenge Succeeds	Slashed	Returned
 
 7. Economic Invariants
 
-7.1 Attack Cost Invariant
+7.1 Attack Cost
 
 Attack Cost > Expected Fraud Profit
 
@@ -208,9 +210,9 @@ Expected Honest Challenge Reward > Challenge Cost
 
 Minimum bond ≥ 1 ETH
 
-Challenge bond ratio = 1:1
+Bond ratio = 1:1
 
-Challenge window: 24h – 7d
+Window: 24h – 7d
 
 
 
@@ -220,10 +222,10 @@ Challenge window: 24h – 7d
 
 Threat	Mitigation
 
-Sybil attacks	High bonding, non-transferable deltas
-Long con	Time decay on credibility
-Spam challenges	Bond slashing
-Juror collusion	Random selection + supermajority
+Sybil	High bonding
+Long con	Time decay
+Spam	Bond slashing
+Collusion	Random jurors
 Data loss	Decentralized storage
 
 
@@ -258,13 +260,13 @@ Time-decaying
 
 10. Implementation Guidelines
 
-Smart contract enforces lifecycle & slashing
+Enforce lifecycle & slashing
 
-Proofs stored on IPFS/Arweave
+Store proofs on IPFS/Arweave
 
-Metadata emitted as events
+Emit metadata events
 
-v0.1 proofs may be wrapped
+Wrap v0.1 proofs
 
 
 
@@ -284,7 +286,7 @@ Backward compatibility required
 
 12. References
 
-1. OAPS v0.1 Specification
+1. OAPS v0.1
 
 
 2. EIP-712
